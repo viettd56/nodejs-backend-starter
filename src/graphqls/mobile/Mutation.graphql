@@ -1,0 +1,5 @@
+directive @log on FIELD_DEFINITION
+
+type Mutation {
+    _empty: String
+}

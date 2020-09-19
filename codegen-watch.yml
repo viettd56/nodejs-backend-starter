@@ -1,0 +1,18 @@
+overwrite: true
+watch: true
+documents: null
+generates:
+    src/generated/graphqls/mobile.d.ts:
+        schema: 'src/graphqls/mobile/**/*.graphql'
+        plugins:
+            - typescript
+            - typescript-resolvers
+        config:
+            typesPrefix: Mobile
+            useIndexSignature: true
+            constEnums: true
+            immutableTypes: true
+            enumsAsTypes: true
+            defaultMapper: Partial<{T}>
+            contextType: src/types#IMobileContext
+            maybeValue: T | undefined

@@ -1,0 +1,17 @@
+overwrite: true
+documents: null
+generates:
+    src/generated/graphqls/mobile.d.ts:
+        schema: 'src/graphqls/mobile/**/*.graphql'
+        plugins:
+            - 'typescript'
+            - 'typescript-resolvers'
+        config:
+            typesPrefix: Mobile
+            useIndexSignature: true
+            constEnums: true
+            immutableTypes: true
+            enumsAsTypes: true
+            defaultMapper: Partial<{T}>
+            contextType: src/types#IMobileContext
+            maybeValue: 'T extends PromiseLike<infer U> ? Promise<U | null> : T | null'
