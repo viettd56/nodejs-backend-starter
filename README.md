@@ -60,7 +60,12 @@ This is template for server NodeJS
     -   [Mongo Seeding](https://github.com/pkosiec/mongo-seeding)
 
 -   Process Manager:
+
     -   [PM2](https://github.com/Unitech/pm2)
+
+-   Validator
+
+    -   [Joi](https://github.com/sideway/joi)
 
 ## Install Dependencies
 
