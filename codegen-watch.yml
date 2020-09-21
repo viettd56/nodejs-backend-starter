@@ -1,6 +1,5 @@
 overwrite: true
 watch: true
-documents: null
 generates:
     src/generated/graphqls/mobile.d.ts:
         schema: 'src/graphqls/mobile/**/*.graphql'

@@ -1,5 +1,4 @@
 overwrite: true
-documents: null
 generates:
     src/generated/graphqls/mobile.d.ts:
         schema: 'src/graphqls/mobile/**/*.graphql'
@@ -14,4 +13,4 @@ generates:
             enumsAsTypes: true
             defaultMapper: Partial<{T}>
             contextType: src/types#IMobileContext
-            maybeValue: 'T extends PromiseLike<infer U> ? Promise<U | null> : T | null'
+            maybeValue: T | undefined
