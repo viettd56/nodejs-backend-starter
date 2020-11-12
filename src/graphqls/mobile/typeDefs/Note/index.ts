@@ -6,7 +6,7 @@ import { Validation, Joi, isMongoId } from 'src/helpers/Validation.helper';
 
 const typeDef = readFileSync(path.join(__dirname, 'typeDef.graphql'), 'UTF-8');
 
-export const MobileNoteResolvers = ({ noteUseCase, jobQueue }: Pick<ICradle, 'noteUseCase' | 'jobQueue'>) => {
+export const MobileNoteSchema = ({ noteUseCase, jobQueue }: Pick<ICradle, 'noteUseCase' | 'jobQueue'>) => {
     const Mutation: MobileMutationResolvers = {
         addNote: async (_, { note }) => {
             Validation({ note }).validate({

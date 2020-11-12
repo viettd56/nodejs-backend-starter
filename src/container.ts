@@ -19,7 +19,7 @@ import { GraphQLMiddleware } from './middlewares/graphql.middleware';
 import { NoteRouter } from './restful/routes/Note.router';
 import { ServerHealthRouter } from './restful/routes/ServerHealth.router';
 import { ServerGraphQLMobileSchema } from './graphqls/mobile';
-import { MobileNoteResolvers } from './graphqls/mobile/typeDefs/Note';
+import { MobileNoteSchema } from './graphqls/mobile/typeDefs/Note';
 import { JobQueue } from './jobs/JobQueue';
 import { JobProcess } from './jobs/JobProcess';
 import { MoleculerConfig } from './configs/Moleculer.config';
@@ -57,7 +57,7 @@ export type ICradle = {
     noteUseCase: ReturnType<typeof NoteUseCase>;
     serverHealthRouter: ReturnType<typeof ServerHealthRouter>;
     serverGraphQLMobileSchema: ReturnType<typeof ServerGraphQLMobileSchema>;
-    mobileNoteResolvers: ReturnType<typeof MobileNoteResolvers>;
+    mobileNoteSchema: ReturnType<typeof MobileNoteSchema>;
     jobQueue: ReturnType<typeof JobQueue>;
     jobProcess: ReturnType<typeof JobProcess>;
     moleculerConfig: ReturnType<typeof MoleculerConfig>;
@@ -106,7 +106,7 @@ export const createAppContainer = (envPath?: string) => {
         noteUseCase: awilix.asFunction(NoteUseCase).singleton(),
         serverHealthRouter: awilix.asFunction(ServerHealthRouter).singleton(),
         serverGraphQLMobileSchema: awilix.asFunction(ServerGraphQLMobileSchema).singleton(),
-        mobileNoteResolvers: awilix.asFunction(MobileNoteResolvers).singleton(),
+        mobileNoteSchema: awilix.asFunction(MobileNoteSchema).singleton(),
         jobQueue: awilix.asFunction(JobQueue).singleton(),
         jobProcess: awilix.asFunction(JobProcess).singleton(),
         moleculerConfig: awilix.asFunction(MoleculerConfig).singleton(),
