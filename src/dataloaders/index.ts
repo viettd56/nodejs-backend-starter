@@ -1,9 +1,8 @@
 import { ICradle } from 'src/container';
-import { FindNoteByIdLoader } from './findNoteById';
 
-export const Dataloaders = ({ noteUseCase }: Pick<ICradle, 'noteUseCase'>) => {
+export const Dataloaders = ({ noteUseCase }: ICradle) => {
     const create = () => {
-        const findUserByIdLoader = FindNoteByIdLoader({ noteUseCase });
+        const findUserByIdLoader = noteUseCase.findByIdLoader();
         const findNoteById = (id: string) => {
             try {
                 return findUserByIdLoader.load(id);

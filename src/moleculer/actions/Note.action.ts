@@ -2,7 +2,7 @@ import { ServiceActions } from 'moleculer';
 import { CreateNoteParams, CreateNoteResponse } from '../TemplateServices';
 import { ICradle } from 'src/container';
 
-export const NoteAction = ({ noteUseCase }: Pick<ICradle, 'noteUseCase'>) => {
+export const NoteAction = ({ noteUseCase }: ICradle) => {
     const createServiceAction = (): ServiceActions => {
         return {
             'create-note': {

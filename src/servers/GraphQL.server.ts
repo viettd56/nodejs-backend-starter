@@ -17,10 +17,7 @@ export const GraphQLServer = ({
     serverGraphQLMobileSchema,
     graphQLConfig,
     databaseConfig,
-}: Pick<
-    ICradle,
-    'httpMiddleware' | 'graphQLMiddleware' | 'serverGraphQLMobileSchema' | 'graphQLConfig' | 'databaseConfig'
->) => {
+}: ICradle) => {
     return {
         listen() {
             const schemaMobileGraphql = makeExecutableSchema({

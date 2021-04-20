@@ -14,7 +14,7 @@ interface IConfigs {
     RUN_SERVER: SERVER;
 }
 
-export const ServerConfig = ({ env }: Pick<ICradle, 'env'>) => {
+export const ServerConfig = ({ env }: ICradle) => {
     return new ValidationHelper<IConfigs>(env).validate({
         NODE_ENV: Joi.string().default('production'),
         HASH_PASSWORD: Joi.string().min(8).max(128).required(),

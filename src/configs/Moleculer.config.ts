@@ -5,7 +5,7 @@ interface IConfigs {
     MOLECULER_SERVICE_NAME: string;
 }
 
-export const MoleculerConfig = ({ env }: Pick<ICradle, 'env'>) => {
+export const MoleculerConfig = ({ env }: ICradle) => {
     return new ValidationHelper<IConfigs>(env).validate({
         MOLECULER_SERVICE_NAME: Joi.string().default('template'),
     });

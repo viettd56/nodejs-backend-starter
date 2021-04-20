@@ -1,6 +1,6 @@
 import { ICradle } from 'src/container';
 
-export const JobProcess = ({ jobQueue, noteUseCase }: Pick<ICradle, 'jobQueue' | 'noteUseCase'>) => {
+export const JobProcess = ({ jobQueue, noteUseCase }: ICradle) => {
     const process = async () => {
         const { queueAddNote } = jobQueue;
 

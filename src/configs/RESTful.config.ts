@@ -6,7 +6,7 @@ interface IConfigs {
     RESTFUL_PORT: number;
 }
 
-export const RESTfulConfig = ({ env }: Pick<ICradle, 'env'>) => {
+export const RESTfulConfig = ({ env }: ICradle) => {
     return new ValidationHelper<IConfigs>(env).validate({
         DEBUG_RESTFUL: Joi.boolean().default(false),
         RESTFUL_PORT: Joi.number().default(3000),

@@ -1,6 +1,6 @@
 import { ICradle } from 'src/container';
 
-export const MoleculerServiceSchema = ({ noteAction }: Pick<ICradle, 'noteAction'>) => {
+export const MoleculerServiceSchema = ({ noteAction }: ICradle) => {
     const createServiceSchema = (name: string) => {
         const actions = {
             ...noteAction.createServiceAction(),

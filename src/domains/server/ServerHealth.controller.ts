@@ -2,10 +2,7 @@ import mongoose from 'mongoose';
 import axios from 'axios';
 import { ICradle } from 'src/container';
 
-export const ServerHealthController = ({
-    redisService,
-    graphQLConfig,
-}: Pick<ICradle, 'redisService' | 'graphQLConfig'>) => {
+export const ServerHealthController = ({ redisService, graphQLConfig }: ICradle) => {
     const checkDatabase = async () => {
         if (mongoose.connection.readyState !== 1) {
             throw new Error('Server Health error: Connect mongodb error ' + mongoose.connection.readyState);

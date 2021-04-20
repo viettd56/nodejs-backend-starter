@@ -7,7 +7,7 @@ import { ICradle } from 'src/container';
 const query = readFileSync(path.join(__dirname, 'Query.graphql'), 'UTF-8');
 const mutation = readFileSync(path.join(__dirname, 'Mutation.graphql'), 'UTF-8');
 
-export const ServerGraphQLMobileSchema = ({ mobileNoteSchema }: Pick<ICradle, 'mobileNoteSchema'>) => {
+export const ServerGraphQLMobileSchema = ({ mobileNoteSchema }: ICradle) => {
     const allSchema = {
         mobileNoteSchema,
     };

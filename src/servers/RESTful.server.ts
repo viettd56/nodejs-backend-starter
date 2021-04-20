@@ -7,11 +7,7 @@ import morgan from 'morgan';
 import { appLogger } from 'src/logger';
 import { ICradle } from 'src/container';
 
-export const RESTfulServer = ({
-    restfulRouter,
-    httpMiddleware,
-    restfulConfig,
-}: Pick<ICradle, 'restfulRouter' | 'httpMiddleware' | 'restfulConfig'>) => {
+export const RESTfulServer = ({ restfulRouter, httpMiddleware, restfulConfig }: ICradle) => {
     return {
         listen() {
             const app = express();

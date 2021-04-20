@@ -1,7 +1,7 @@
 import express from 'express';
 import { ICradle } from 'src/container';
 
-export const ServerHealthRouter = ({ serverHealthController }: Pick<ICradle, 'serverHealthController'>) => {
+export const ServerHealthRouter = ({ serverHealthController }: ICradle) => {
     const router = express.Router();
 
     router.get('/', async (req, res, next) => {

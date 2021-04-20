@@ -2,7 +2,7 @@ import express from 'express';
 import { ICradle } from 'src/container';
 import { Validation, Joi, isMongoId } from 'src/helpers/Validation.helper';
 
-export const NoteRouter = ({ noteUseCase }: Pick<ICradle, 'noteUseCase'>) => {
+export const NoteRouter = ({ noteUseCase }: ICradle) => {
     const router = express.Router();
 
     router.get('/', async (req, res, next) => {

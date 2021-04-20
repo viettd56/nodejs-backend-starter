@@ -6,7 +6,7 @@ interface IConfigs {
     NATS_TOKEN?: string;
 }
 
-export const NatsConfig = ({ env }: Pick<ICradle, 'env'>) => {
+export const NatsConfig = ({ env }: ICradle) => {
     return new ValidationHelper<IConfigs>(env).validate({
         NATS_URL: Joi.string().required(),
         NATS_TOKEN: Joi.string(),

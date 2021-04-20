@@ -1,7 +1,7 @@
 import RedisCache from './RedisCache';
 import { ICradle } from 'src/container';
 
-export const ConfigWorkspaceCache = ({ cacheConfig, redisService }: Pick<ICradle, 'cacheConfig' | 'redisService'>) => {
+export const ConfigWorkspaceCache = ({ cacheConfig, redisService }: ICradle) => {
     const cache = new RedisCache(redisService.redis, 'config_work_space:', cacheConfig.CACHE_TTL);
     return {
         async get(key: string): Promise<{ logo: string; workspace_is_active: boolean } | undefined> {

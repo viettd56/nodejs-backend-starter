@@ -13,7 +13,7 @@ interface IConfigs {
     REDIS_BULL_PREFIX: string;
 }
 
-export const DatabaseConfig = ({ env }: Pick<ICradle, 'env'>) => {
+export const DatabaseConfig = ({ env }: ICradle) => {
     return new ValidationHelper<IConfigs>(env).validate({
         MONGODB_URI: Joi.string().required(),
         REDIS_CACHE_HOST: Joi.string().required(),

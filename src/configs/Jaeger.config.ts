@@ -6,7 +6,7 @@ interface IConfigs {
     JAEGER_PORT: number;
 }
 
-export const JaegerConfig = ({ env }: Pick<ICradle, 'env'>) => {
+export const JaegerConfig = ({ env }: ICradle) => {
     return new ValidationHelper<IConfigs>(env).validate({
         JAEGER_HOST: Joi.string(),
         JAEGER_PORT: Joi.number().default(6832),

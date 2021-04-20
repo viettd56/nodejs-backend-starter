@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Validation, Joi, isMongoId } from 'src/helpers/Validation.helper';
 import { NoteModelInterface } from './Note.model';
 
-export const NoteRepository = ({ NoteModel }: Pick<ICradle, 'NoteModel'>) => {
+export const NoteRepository = ({ NoteModel }: ICradle) => {
     const create = async ({ note }: { note: NoteModelInterface['note'] }) => {
         const newNote = new NoteModel({
             note,

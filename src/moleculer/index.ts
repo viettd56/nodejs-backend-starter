@@ -3,12 +3,7 @@ import JaegerService from 'moleculer-jaeger';
 import { ICradle } from 'src/container';
 import { OtherServices } from './OtherService';
 
-export const MoleculerService = ({
-    natsConfig,
-    moleculerConfig,
-    jaegerConfig,
-    moleculerServiceSchema,
-}: Pick<ICradle, 'natsConfig' | 'moleculerConfig' | 'jaegerConfig' | 'moleculerServiceSchema'>) => {
+export const MoleculerService = ({ natsConfig, moleculerConfig, jaegerConfig, moleculerServiceSchema }: ICradle) => {
     const broker = new ServiceBroker({
         transporter: {
             type: 'NATS',

@@ -1,11 +1,7 @@
 import express from 'express';
 import { ICradle } from 'src/container';
 
-export const RESTfulRouter = ({
-    httpMiddleware,
-    noteRouter,
-    serverHealthRouter,
-}: Pick<ICradle, 'httpMiddleware' | 'noteRouter' | 'serverHealthRouter'>) => {
+export const RESTfulRouter = ({ httpMiddleware, noteRouter, serverHealthRouter }: ICradle) => {
     const router = express.Router();
 
     router.use('/', httpMiddleware.consoleLog);

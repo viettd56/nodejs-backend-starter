@@ -8,7 +8,7 @@ interface IConfigs {
     JWT_ISSUER: string;
 }
 
-export const TokenJWTConfig = ({ env }: Pick<ICradle, 'env'>) => {
+export const TokenJWTConfig = ({ env }: ICradle) => {
     return new ValidationHelper<IConfigs>(env).validate({
         JWT_RSA_PRIVATE_KEY: Joi.string().trim().replace(/\\n/g, '\n').required(),
         JWT_RSA_PUBLIC_KEY: Joi.string().trim().replace(/\\n/g, '\n').required(),

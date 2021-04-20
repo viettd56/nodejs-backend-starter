@@ -25,7 +25,7 @@ interface Request {
     };
 }
 
-export const GraphQLMiddleware = ({ graphQLConfig, dataloaders }: Pick<ICradle, 'graphQLConfig' | 'dataloaders'>) => {
+export const GraphQLMiddleware = ({ graphQLConfig, dataloaders }: ICradle) => {
     const formatError = (error: GraphQLError): CustomGraphQLFormattedError => {
         const DEBUG_GRAPHQL = graphQLConfig.DEBUG_GRAPHQL;
 

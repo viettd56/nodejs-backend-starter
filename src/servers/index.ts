@@ -1,10 +1,6 @@
 import { ICradle } from 'src/container';
 
-export const ServerService = ({
-    restfulServer,
-    graphQLServer,
-    moleculerService,
-}: Pick<ICradle, 'restfulServer' | 'graphQLServer' | 'moleculerService'>) => {
+export const ServerService = ({ restfulServer, graphQLServer, moleculerService }: ICradle) => {
     return {
         async start() {
             await moleculerService.start({
