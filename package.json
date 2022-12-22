@@ -36,7 +36,7 @@
         "i18next": "^21.6.16",
         "ioredis": "5.0.4",
         "json-stringify-safe": "5.0.1",
-        "jsonwebtoken": "8.5.1",
+        "jsonwebtoken": "9.0.0",
         "lodash": "4.17.21",
         "moleculer": "0.14.20",
         "moleculer-jaeger": "0.2.3",
