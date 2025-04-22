@@ -1,27 +1,21 @@
 {
-    "compilerOptions": {
-        "plugins": [{ "transform": "ts-transformer-imports" }],
-        "module": "commonjs",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "composite": true,
-        "declarationMap": false,
-        "outDir": "dist/",
-        "rootDir": "src/",
-        "target": "ES2019",
-        "strict": true,
-        "noUncheckedIndexedAccess": true,
-        "noErrorTruncation": true,
-        "forceConsistentCasingInFileNames": true,
-        "esModuleInterop": true,
-        "skipDefaultLibCheck": true,
-        "skipLibCheck": true,
-        "baseUrl": ".",
-        "removeComments": true,
-        "paths": {
-            "src/*": ["src/*"]
-        } /* Specify a set of entries that re-map imports to additional lookup locations. */
-    },
-    "include": ["src/", "src/types/*.d.ts"],
-    "exclude": ["node_modules"]
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  }
 }
