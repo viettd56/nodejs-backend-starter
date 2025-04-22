@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-export const BcryptHelper = () => {
+const BcryptHelper = () => {
     const SALT_ROUNDS = 12;
     return {
         hashPassword(password: string): Promise<string> {
@@ -25,3 +25,5 @@ export const BcryptHelper = () => {
         },
     };
 };
+
+export const bcryptHelper = BcryptHelper();

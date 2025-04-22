@@ -1,26 +1,29 @@
 import { Joi, ValidationHelper } from 'src/helpers/Validation.helper';
-import _ from 'lodash';
-import { ICradle } from 'src/container';
-
-export type ENV = 'dev' | 'debug' | 'production' | 'dev_docker' | 'test' | 'test_ci';
-export type SERVER = 'GRAPHQL' | 'RESTFUL';
 
 interface IConfigs {
-    NODE_ENV: ENV;
-    HASH_PASSWORD: string;
-    ENCRYPTION_KEY: string;
-    TIMEZONE: string;
-    REMOVE_JOB_ON_COMPLETE: boolean;
-    RUN_SERVER: SERVER;
+    IS_DEBUG: boolean;
+    DEBUG_KEY: string;
+    INTERNAL_API_KEY: string;
+    IS_DEV: boolean;
+    MONITOR_KEY: string;
+    ADMIN_IPS: string;
+    SIGN_PUBLIC_KEY: string;
+    SIGN_PRIVATE_KEY: string;
+    INTERNAL_IPS: string;
 }
 
-export const ServerConfig = ({ env }: ICradle) => {
-    return new ValidationHelper<IConfigs>(env).validate({
-        NODE_ENV: Joi.string().default('production'),
-        HASH_PASSWORD: Joi.string().min(8).max(128).required(),
-        ENCRYPTION_KEY: Joi.string().length(32).required(),
-        TIMEZONE: Joi.string().default('Asia/Ho_Chi_Minh'),
-        REMOVE_JOB_ON_COMPLETE: Joi.boolean().default(true),
-        RUN_SERVER: Joi.string(),
+const ServerConfig = () => {
+    return new ValidationHelper<IConfigs>(process.env).validate({
+        IS_DEBUG: Joi.boolean().default(false),
+        IS_DEV: Joi.boolean().default(false),
+        DEBUG_KEY: Joi.string().required(),
+        INTERNAL_API_KEY: Joi.string().required(),
+        MONITOR_KEY: Joi.string().required(),
+        ADMIN_IPS: Joi.string().default('103.53.170.145'),
+        SIGN_PUBLIC_KEY: Joi.string().required(),
+        SIGN_PRIVATE_KEY: Joi.string().required(),
+        INTERNAL_IPS: Joi.string().default('113.190.233.178;123.30.172.8;103.53.170.145'),
     });
 };
+
+export const serverConfig = ServerConfig();

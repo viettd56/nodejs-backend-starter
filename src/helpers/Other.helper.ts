@@ -1,70 +1,75 @@
-import _ from 'lodash';
-import escapeStringRegexp from 'escape-string-regexp';
-import Exception from 'src/exeptions/Exception';
-import ExceptionCode from 'src/exeptions/ExceptionCode';
-import { Types } from 'mongoose';
+import moment from 'moment';
+import * as fs from 'fs';
+import { rimrafSync } from 'rimraf';
+import url from 'url';
 
-const safeRegex = require('safe-regex');
+import { customAlphabet } from 'nanoid';
 
-const sortByKeys = (object) => {
-    const keys = Object.keys(object);
-    const sortedKeys = _.sortBy(keys);
+const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 20);
 
-    return _.fromPairs(_.map(sortedKeys, (key) => [key, object[key]]));
+const getTime = () => {
+    const momentUTC = moment().utc();
+    return {
+        today: () => Number(momentUTC.format('YYYYMMDD')),
+        todayWeek: () => Number(momentUTC.format('YYYY') + moment().week().toString()),
+        todayMonth: () => Number(momentUTC.format('YYYYMM')),
+        todayYear: () => Number(momentUTC.format('YYYY')),
+        now: () => momentUTC.unix(),
+        momentUTC: () => momentUTC,
+    };
 };
 
-const changeAlias = (alias: string) => {
-    let str = alias;
-    if (alias) {
-        str = str.toLowerCase();
-        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
-        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
-        str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
-        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o');
-        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u');
-        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
-        str = str.replace(/đ/g, 'd');
+function camelToSnakeCase(str: string) {
+    let result = str.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`);
+    if (result[0] === '_') {
+        result = result.slice(1);
     }
+    return result;
+}
 
-    return str;
+const objectKeyToSnake = (obj: any) => {
+    const snakeCaseObject: any = {};
+    for (const key in obj) {
+        const snakeCaseKey = camelToSnakeCase(key);
+        snakeCaseObject[snakeCaseKey] = obj[key];
+    }
+    return snakeCaseObject;
 };
 
-const changeAliasWithOutWhiteSpaces = (alias: string) => {
-    let str = alias;
-    if (alias) {
-        str = str.toLowerCase();
-        str = str.replace(/\s/g, '');
-        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
-        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
-        str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
-        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o');
-        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u');
-        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
-        str = str.replace(/đ/g, 'd');
+const removeFile = (filePath: string | string[]) => {
+    if (typeof filePath === 'string') {
+        if (fs.existsSync(filePath)) {
+            try {
+                rimrafSync(filePath);
+            } catch (error) {}
+        }
+    } else {
+        filePath.forEach((path) => {
+            try {
+                if (fs.existsSync(path)) {
+                    rimrafSync(path);
+                }
+            } catch (error) {}
+        });
     }
-
-    return str;
 };
 
-const newRegExp = (_pattern: string, flag?: string) => {
-    const pattern = escapeStringRegexp(_pattern);
-    if (!safeRegex(pattern)) {
-        throw new Exception('Input invalid', ExceptionCode.REGEX_NOT_SAFE);
-    }
-    return new RegExp(pattern, flag);
-};
+const addQueryString = (originalUrl: string, query: Record<string, string>) => {
+    // Phân tích URL
+    const parsedUrl = new URL(originalUrl);
 
-const createObjectID = (id: string) => {
-    if (id) {
-        return Types.ObjectId(id);
-    }
-    return undefined;
+    Object.entries(query).forEach(([key, value]) => {
+        parsedUrl.searchParams.append(key, value);
+    });
+
+    return parsedUrl.toString();
 };
 
 export const OtherHelper = {
-    sortByKeys,
-    changeAlias,
-    changeAliasWithOutWhiteSpaces,
-    newRegExp,
-    createObjectID,
+    getTime,
+    camelToSnakeCase,
+    objectKeyToSnake,
+    removeFile,
+    nanoid,
+    addQueryString,
 };

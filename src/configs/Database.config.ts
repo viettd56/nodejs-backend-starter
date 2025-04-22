@@ -1,28 +1,15 @@
-import { ValidationHelper, Joi } from 'src/helpers/Validation.helper';
-import { ICradle } from 'src/container';
+import { Joi, ValidationHelper } from 'src/helpers/Validation.helper';
 
 interface IConfigs {
-    MONGODB_URI: string;
-    REDIS_CACHE_HOST: string;
-    REDIS_CACHE_PORT: number;
-    REDIS_CACHE_PASSWORD?: string;
-    REDIS_CACHE_PREFIX: string;
-    REDIS_BULL_HOST: string;
-    REDIS_BULL_PORT: number;
-    REDIS_BULL_PASSWORD?: string;
-    REDIS_BULL_PREFIX: string;
+    DATABASE_URL: string;
+    DATABASE_READ_URL: string;
 }
 
-export const DatabaseConfig = ({ env }: ICradle) => {
-    return new ValidationHelper<IConfigs>(env).validate({
-        MONGODB_URI: Joi.string().required(),
-        REDIS_CACHE_HOST: Joi.string().required(),
-        REDIS_CACHE_PORT: Joi.number().default(6379),
-        REDIS_CACHE_PASSWORD: Joi.string(),
-        REDIS_CACHE_PREFIX: Joi.string().required(),
-        REDIS_BULL_HOST: Joi.string().required(),
-        REDIS_BULL_PORT: Joi.number().default(6379),
-        REDIS_BULL_PASSWORD: Joi.string(),
-        REDIS_BULL_PREFIX: Joi.string().required(),
+const DatabaseConfig = () => {
+    return new ValidationHelper<IConfigs>(process.env).validate({
+        DATABASE_URL: Joi.string().required(),
+        DATABASE_READ_URL: Joi.string().required(),
     });
 };
+
+export const databaseConfig = DatabaseConfig();

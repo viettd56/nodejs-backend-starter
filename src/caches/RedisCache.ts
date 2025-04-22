@@ -1,12 +1,13 @@
 import Redis from 'ioredis';
-class RedisCache {
+
+export class RedisCache {
     prefix: string;
     ttl?: number;
-    redis: Redis.Redis;
+    redis: Redis;
 
-    constructor(redis: Redis.Redis, prefix: string, ttl?: number) {
+    constructor(redis: Redis, prefix: string, ttl?: number) {
         this.prefix = prefix;
-        this.ttl = ttl;
+        this.ttl = ttl ? Math.round(ttl) : undefined;
         this.redis = redis;
     }
 
@@ -16,6 +17,7 @@ class RedisCache {
             return data;
         } catch (error) {
             return undefined;
+        } finally {
         }
     }
 
@@ -28,6 +30,7 @@ class RedisCache {
             }
         } catch (error) {
             return undefined;
+        } finally {
         }
     }
 
@@ -42,6 +45,19 @@ class RedisCache {
             return undefined;
         }
     }
-}
 
-export default RedisCache;
+    public async incr(key: string) {
+        try {
+            const data = await this.redis.incr(this.prefix + key);
+            if (!data) {
+                return data;
+            }
+            if (data === 1) {
+                await this.redis.expire(this.prefix + key, this.ttl || 0);
+            }
+            return data;
+        } catch (error) {
+            return undefined;
+        }
+    }
+}

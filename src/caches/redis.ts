@@ -1,26 +1,41 @@
-// Redis config
 import Redis from 'ioredis';
-import { appLogger } from 'src/logger';
-import { ICradle } from 'src/container';
+import { redisConfig } from '../configs/Redis.config';
 
-export const RedisService = ({ databaseConfig }: ICradle) => {
-    const { REDIS_CACHE_HOST, REDIS_CACHE_PORT, REDIS_CACHE_PREFIX, REDIS_CACHE_PASSWORD } = databaseConfig;
-    const redis = new Redis({
-        host: REDIS_CACHE_HOST,
-        port: REDIS_CACHE_PORT,
-        password: REDIS_CACHE_PASSWORD,
-        keyPrefix: REDIS_CACHE_PREFIX,
-    });
+const RedisService = () => {
+    const {
+        REDIS_CACHE_HOST,
+        REDIS_CACHE_PASSWORD,
+        REDIS_CACHE_PORT,
+        REDIS_CACHE_PREFIX,
+        REDIS_CACHE_TLS,
+        REDIS_CACHE_DB,
+    } = redisConfig;
+    const create = (keyPrefix: string) => {
+        const redis = new Redis({
+            host: REDIS_CACHE_HOST,
+            port: REDIS_CACHE_PORT,
+            password: REDIS_CACHE_PASSWORD,
+            keyPrefix,
+            tls: REDIS_CACHE_TLS === true ? {} : undefined,
+            // db: REDIS_CACHE_DB,
+            // db: 10,
+        });
 
-    const close = () => {
-        redis.quit();
+        // const close = () => {
+        //     redis.quit();
+        // };
+
+        redis.on('error', (e) => {
+            console.log('Redis connect error', e);
+        });
+        return redis;
     };
 
-    redis.on('error', () => {
-        appLogger.error('Redis connect error');
-    });
     return {
-        redis,
-        close,
+        redis: create(REDIS_CACHE_PREFIX),
+        // global: create('global:'),
+        create,
     };
 };
+
+export const redisService = RedisService();

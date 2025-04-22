@@ -1,44 +1,21 @@
-import Joi from '@hapi/joi';
-
+import Joi from 'joi';
+import { Exception } from '../exceptions/Exception';
 export class ValidationHelper<T> {
     private input: T;
-    constructor(input) {
+    constructor(input: any) {
         this.input = input;
     }
 
     validate(joiSchema: { [k in keyof T]: Joi.SchemaLike | Joi.SchemaLike[] }) {
-        const { error, value } = Joi.validate(this.input, Joi.object(joiSchema), {
-            allowUnknown: true,
-        });
-
-        if (error) {
-            throw new Error(`Validation error: ${error.message}`);
+        try {
+            return Joi.attempt(this.input, Joi.object(joiSchema), {
+                allowUnknown: true,
+                convert: true,
+            }) as T;
+        } catch (error: any) {
+            throw new Exception(`Validation error: ${error.message}`);
         }
-
-        return value;
     }
 }
-
-export function Validation<T>(input: T) {
-    const validate = (joiSchema: { [k in keyof T]: Joi.SchemaLike | Joi.SchemaLike[] }) => {
-        const { error, value } = Joi.validate(input, Joi.object(joiSchema), {
-            allowUnknown: true,
-        });
-
-        if (error) {
-            throw new Error(`Validation error: ${error.message}`);
-        }
-
-        return value;
-    };
-
-    return {
-        validate,
-    };
-}
-
-export const isMongoId = () => {
-    return Joi.string().regex(/^[0-9a-fA-F]{24}$/);
-};
 
 export { Joi };

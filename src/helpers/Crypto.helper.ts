@@ -3,7 +3,7 @@ import crypto from 'crypto';
 const IV_LENGTH = 16; // For AES, this is always 16
 type algorithm = 'sha1' | 'sha256' | 'md5';
 
-export const CryptoHelper = () => {
+const CryptoHelper = () => {
     return {
         encrypt(text: string, encryptionKey: string) {
             const iv = crypto.randomBytes(IV_LENGTH);
@@ -32,5 +32,10 @@ export const CryptoHelper = () => {
         createHash(algorithm: algorithm, data: string) {
             return crypto.createHash(algorithm).update(data).digest('hex');
         },
+        createHmac(algorithm: algorithm, data: string, secretKey: string) {
+            return crypto.createHmac(algorithm, secretKey).update(data).digest('hex');
+        },
     };
 };
+
+export const cryptoHelper = CryptoHelper();

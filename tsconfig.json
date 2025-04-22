@@ -1,31 +1,27 @@
 {
     "compilerOptions": {
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "target": "es6",
-        "forceConsistentCasingInFileNames": true,
-        "noImplicitReturns": true,
-        "strict": true,
-        "alwaysStrict": true,
+        "plugins": [{ "transform": "ts-transformer-imports" }],
         "module": "commonjs",
-        "noImplicitAny": false,
-        "moduleResolution": "node",
-        "strictNullChecks": true,
-        "allowSyntheticDefaultImports": true,
-        "typeRoots": ["node_modules/@types"],
-        "outDir": "dist",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "composite": true,
+        "declarationMap": false,
+        "outDir": "dist/",
+        "rootDir": "src/",
+        "target": "ES2019",
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "noErrorTruncation": true,
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": true,
         "baseUrl": ".",
         "removeComments": true,
-        "skipLibCheck": true,
-        "lib": ["es2017", "es6", "es2016", "esnext"],
-        "declaration": false,
-        "skipDefaultLibCheck": true,
         "paths": {
-            "*": ["node_modules/*", "./*"]
-        }
+            "src/*": ["src/*"]
+        } /* Specify a set of entries that re-map imports to additional lookup locations. */
     },
-    "include": ["src"],
+    "include": ["src/", "src/types/*.d.ts"],
     "exclude": ["node_modules"]
 }

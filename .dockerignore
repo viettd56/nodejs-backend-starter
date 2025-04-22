@@ -1,4 +1,5 @@
 node_modules
+dist
 npm-debug.log
 *.md
 PATENTS
@@ -19,3 +20,4 @@ spec/
 
 # IDEs
 .idea/
+tsconfig.tsbuildinfo

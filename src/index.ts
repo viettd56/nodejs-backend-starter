@@ -1,20 +1,13 @@
-import { createAppContainer } from './container';
-import path from 'path';
+require('dotenv').config();
+import { createServer } from 'http';
+import { app } from './app';
+import { OtherCache } from './caches/OtherCache.cache';
 
-let envPath: string | undefined = undefined;
-
-if (process.env.DOTENV_FILE) {
-    envPath = path.join(__dirname, '..', process.env.DOTENV_FILE);
-}
-
-const container = createAppContainer(envPath);
-
-const setupService = container.cradle.setupService;
-const serverService = container.cradle.serverService;
+const PORT = 3000;
 
 (async () => {
-    await setupService.setup();
-    await serverService.start();
-})().catch((e) => {
-    console.error(e);
-});
+    const server = createServer(app);
+    server.listen(PORT);
+
+    console.log('Server running at: ' + PORT);
+})();
