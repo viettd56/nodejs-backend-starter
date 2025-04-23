@@ -7,6 +7,24 @@ import { nanoid } from 'nanoid';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import compress from '@fastify/compress';
+import { logger } from './helpers/Logger.helper';
+
+// Override console.log
+console.log = (...args) => {
+    if (args.length === 1) {
+        logger.info(args[0]); // Log with info level
+        return;
+    }
+    logger.info({ args }); // Log with info level
+};
+
+console.error = (...args) => {
+    if (args.length === 1) {
+        logger.error(args[0]); // Log with info level
+        return;
+    }
+    logger.error({ args }); // Log with info level
+};
 
 const fastify = Fastify({
     // logger: { level: 'error`' },
@@ -29,7 +47,7 @@ fastify.register(sampleRoutes, {
 fastify.setErrorHandler(function (err, request, reply) {
     const id = nanoid();
     // request.log.error({ err, id });
-    // console.error({ err, id });
+    console.error({ err, id });
     if (err instanceof Exception) {
         reply.status(500).send({
             status: false,
