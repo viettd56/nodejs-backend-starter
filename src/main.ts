@@ -6,9 +6,11 @@ import { Exception } from './helpers/Exception.helper';
 import { nanoid } from 'nanoid';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
+import compress from '@fastify/compress';
 
 const fastify = Fastify({
     // logger: { level: 'error`' },
+    // logger: true,
     trustProxy: true,
 });
 
@@ -17,6 +19,7 @@ fastify.register(cors, {
 });
 
 fastify.register(helmet, { global: true });
+fastify.register(compress, { global: true });
 
 // Declare a route
 fastify.register(sampleRoutes, {

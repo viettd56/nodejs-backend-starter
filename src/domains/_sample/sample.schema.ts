@@ -1,21 +1,15 @@
+import { commonSchema } from '../common/common.schema';
+
 const SampleSchema = () => {
     const getSamples = {
-        schema: {
-            response: {
-                200: {
-                    type: 'object',
-                    properties: {
-                        status: { type: 'boolean' },
-                    },
-                },
-                default: {
-                    type: 'object',
-                    properties: {
-                        status: { type: 'boolean' },
-                        message: { type: 'string' },
-                    },
+        response: {
+            200: {
+                type: 'object',
+                properties: {
+                    status: { type: 'boolean' },
                 },
             },
+            default: commonSchema.responseDefault,
         },
     };
 

@@ -11,7 +11,7 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
         '/sample',
         {
             // preHandler: [sampleMiddleware.auth],
-            schema: sampleSchema.getSamples.schema,
+            schema: sampleSchema.getSamples,
         },
         async (req, res) => {
             const { offset, limit } = new ValidationHelper<{
@@ -32,7 +32,7 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
     app.get(
         '/sample/:id',
         {
-            schema: sampleSchema.getSamples.schema,
+            schema: sampleSchema.getSamples,
         },
         async (req, res) => {
             const { id } = new ValidationHelper<{
@@ -51,7 +51,7 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
     app.post(
         '/sample',
         {
-            schema: sampleSchema.getSamples.schema,
+            schema: sampleSchema.getSamples,
         },
         async (req, res) => {
             const { id } = new ValidationHelper<{
