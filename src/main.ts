@@ -4,11 +4,19 @@ import Fastify from 'fastify';
 import { sampleRoutes } from './domains/_sample/sample.router';
 import { Exception } from './helpers/Exception.helper';
 import { nanoid } from 'nanoid';
+import cors from '@fastify/cors';
+import helmet from '@fastify/helmet';
 
 const fastify = Fastify({
     // logger: { level: 'error`' },
     trustProxy: true,
 });
+
+fastify.register(cors, {
+    origin: ['https://sample.com'],
+});
+
+fastify.register(helmet, { global: true });
 
 // Declare a route
 fastify.register(sampleRoutes, {
