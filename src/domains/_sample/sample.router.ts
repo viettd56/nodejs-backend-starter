@@ -1,6 +1,8 @@
 import { FastifyPluginCallback } from 'fastify';
 import { sampleMiddleware } from './sample.middleware';
 import { sampleSchema } from './sample.schema';
+import { sampleService } from './sample.service';
+import { Joi, ValidationHelper } from 'src/helpers/Validation.helper';
 
 export const sampleRoutes: FastifyPluginCallback = (app) => {
     app.addHook('preHandler', sampleMiddleware.auth);
@@ -12,7 +14,14 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
             schema: sampleSchema.getSamples.schema,
         },
         async (request, reply) => {
-            const query = request.query;
+            const { offset, limit } = new ValidationHelper<{
+                offset: number;
+                limit: number;
+            }>(request.query).validate({
+                offset: Joi.number().default(0),
+                limit: Joi.number().default(10),
+            });
+            sampleService.logic();
             return {
                 status: true,
             };
@@ -24,7 +33,13 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
             schema: sampleSchema.getSamples.schema,
         },
         async (request, reply) => {
-            const { id } = request.params as any;
+            const { id } = new ValidationHelper<{
+                id: number;
+            }>(request.params).validate({
+                id: Joi.number().default(0),
+            });
+            console.log('🚀 ~ id:', id);
+            sampleService.logic();
             return {
                 status: true,
             };
@@ -36,7 +51,12 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
             schema: sampleSchema.getSamples.schema,
         },
         async (request, reply) => {
-            const body = request.body;
+            const { id } = new ValidationHelper<{
+                id: number;
+            }>(request.body).validate({
+                id: Joi.number().default(0),
+            });
+            sampleService.logic();
             return {
                 status: true,
             };
