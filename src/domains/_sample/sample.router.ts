@@ -13,29 +13,31 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
             // preHandler: [sampleMiddleware.auth],
             schema: sampleSchema.getSamples.schema,
         },
-        async (request, reply) => {
+        async (req, res) => {
             const { offset, limit } = new ValidationHelper<{
                 offset: number;
                 limit: number;
-            }>(request.query).validate({
+            }>(req.query).validate({
                 offset: Joi.number().default(0),
                 limit: Joi.number().default(10),
             });
+            console.log('🚀 ~ offset:', offset);
             sampleService.logic();
             return {
                 status: true,
             };
         },
     );
+
     app.get(
         '/sample/:id',
         {
             schema: sampleSchema.getSamples.schema,
         },
-        async (request, reply) => {
+        async (req, res) => {
             const { id } = new ValidationHelper<{
                 id: number;
-            }>(request.params).validate({
+            }>(req.params).validate({
                 id: Joi.number().default(0),
             });
             console.log('🚀 ~ id:', id);
@@ -45,17 +47,19 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
             };
         },
     );
+
     app.post(
         '/sample',
         {
             schema: sampleSchema.getSamples.schema,
         },
-        async (request, reply) => {
+        async (req, res) => {
             const { id } = new ValidationHelper<{
                 id: number;
-            }>(request.body).validate({
+            }>(req.body).validate({
                 id: Joi.number().default(0),
             });
+            console.log('🚀 ~ id:', id);
             sampleService.logic();
             return {
                 status: true,

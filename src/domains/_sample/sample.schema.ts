@@ -12,6 +12,7 @@ const SampleSchema = () => {
                     type: 'object',
                     properties: {
                         status: { type: 'boolean' },
+                        message: { type: 'string' },
                     },
                 },
             },
