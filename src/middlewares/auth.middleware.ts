@@ -1,9 +1,9 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { RouteHandler } from 'fastify';
 
 const AuthMiddleware = () => {
-    const auth = async (request: FastifyRequest, reply: FastifyReply) => {
+    const auth: RouteHandler = async (request, reply) => {
         console.log(`Request received: ${request.method} ${request.url}`);
-        console.log(`Request headers: ${JSON.stringify(request.headers)}`);
+        // console.log(`Request headers: ${JSON.stringify(request.headers)}`);
     };
 
     return {

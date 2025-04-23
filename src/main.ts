@@ -6,7 +6,9 @@ const fastify = Fastify({
 });
 
 // Declare a route
-fastify.register(appRoutes);
+fastify.register(appRoutes, {
+    prefix: '/v1/app',
+});
 
 const start = async () => {
     try {
