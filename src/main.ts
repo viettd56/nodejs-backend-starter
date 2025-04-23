@@ -1,9 +1,10 @@
 import Fastify from 'fastify';
 import { sampleRoutes } from './domains/_sample/sample.router';
 import { Exception } from './helpers/Exception.helper';
+import { nanoid } from 'nanoid';
 
 const fastify = Fastify({
-    // logger: true,
+    // logger: { level: 'error`' },
     trustProxy: true,
 });
 
@@ -13,14 +14,18 @@ fastify.register(sampleRoutes, {
 });
 
 fastify.setErrorHandler(function (err, request, reply) {
+    const id = nanoid();
+    // request.log.error({ err, id });
+    console.error({ err, id });
     if (err instanceof Exception) {
         reply.status(500).send({
             status: false,
             message: err.message,
+            request_id: id,
         });
         return;
     }
-    reply.status(500).send({ status: false, message: 'Internal server error' });
+    reply.status(500).send({ status: false, message: 'Internal server error', request_id: id });
 });
 
 const start = async () => {
