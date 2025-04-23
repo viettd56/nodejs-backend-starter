@@ -1,6 +1,6 @@
 import { Model, Table, Column, DataType, ForeignKey, BelongsTo, Index, Unique } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
-import moment from 'dayjs';
+import moment from 'moment-timezone';
 import _ from 'lodash';
 
 type ExtraData = {};
