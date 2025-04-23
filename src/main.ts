@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+require('dotenv').config();
 import Fastify from 'fastify';
 import { sampleRoutes } from './domains/_sample/sample.router';
 import { Exception } from './helpers/Exception.helper';

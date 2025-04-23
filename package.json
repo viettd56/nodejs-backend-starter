@@ -13,6 +13,7 @@
         "start:dev": "nest start --watch swc",
         "start:debug": "nest start --debug --watch swc",
         "start:prod": "node dist/main",
+        "dev_test": "node -r dotenv/config",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "test": "jest",
         "test:watch": "jest --watch",
@@ -21,9 +22,22 @@
         "test:e2e": "jest --config ./test/jest-e2e.json"
     },
     "dependencies": {
+        "@bull-board/express": "^6.9.2",
+        "axios": "^1.8.4",
+        "bcryptjs": "^3.0.2",
+        "bullmq": "^5.49.2",
+        "chance": "^1.1.12",
+        "dayjs": "^1.11.13",
+        "dotenv": "^16.5.0",
         "fastify": "^5.3.2",
+        "ioredis": "^5.6.1",
         "joi": "^17.13.3",
-        "nanoid": "3.3.11"
+        "lodash": "^4.17.21",
+        "nanoid": "3.3.11",
+        "pg": "^8.15.1",
+        "pg-connection-string": "^2.8.1",
+        "sequelize": "^6.37.7",
+        "sequelize-typescript": "^2.1.6"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3.2.0",
