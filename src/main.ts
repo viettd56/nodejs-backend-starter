@@ -29,7 +29,7 @@ fastify.register(sampleRoutes, {
 fastify.setErrorHandler(function (err, request, reply) {
     const id = nanoid();
     // request.log.error({ err, id });
-    console.error({ err, id });
+    // console.error({ err, id });
     if (err instanceof Exception) {
         reply.status(500).send({
             status: false,
