@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 require('dotenv').config();
 import Fastify from 'fastify';
-import { sampleRoutes } from './domains/_sample/sample.router';
+import { sampleRoutes } from './domains/_shared/_sample/sample.router';
 import { Exception } from './helpers/Exception.helper';
 import { nanoid } from 'nanoid';
 // import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import { logger } from './helpers/Logger.helper';
-import { healthCheckRoutes } from './domains/healthCheck/healthCheck.router';
+import { healthCheckRoutes } from './domains/_shared/healthCheck/healthCheck.router';
 
 // Override console.log
 console.log = (...args) => {

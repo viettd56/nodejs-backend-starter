@@ -15,7 +15,7 @@ const TokenService = () => {
             expiresIn: expiresIn as any,
             audience: tokenJWTConfig.JWT_AUD,
             issuer: tokenJWTConfig.JWT_ISSUER,
-        }) as string;
+        });
     };
     const verify = (token: string) => {
         if (!tokenJWTConfig.JWT_PUBLIC_KEY) {
