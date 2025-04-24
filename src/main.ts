@@ -6,24 +6,19 @@ import { Exception } from './helpers/Exception.helper';
 import { nanoid } from 'nanoid';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
-import compress from '@fastify/compress';
 import { logger } from './helpers/Logger.helper';
 
 // Override console.log
 console.log = (...args) => {
-    if (args.length === 1) {
-        logger.info(args[0]); // Log with info level
-        return;
+    for (const arg of args) {
+        logger.info(arg); // Log with info level
     }
-    logger.info({ args }); // Log with info level
 };
 
 console.error = (...args) => {
-    if (args.length === 1) {
-        logger.error(args[0]); // Log with info level
-        return;
+    for (const arg of args) {
+        logger.error(arg); // Log with info level
     }
-    logger.error({ args }); // Log with info level
 };
 
 const fastify = Fastify({
@@ -37,7 +32,6 @@ fastify.register(cors, {
 });
 
 fastify.register(helmet, { global: true });
-fastify.register(compress, { global: true });
 
 // Declare a route
 fastify.register(sampleRoutes, {
