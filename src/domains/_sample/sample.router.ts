@@ -8,7 +8,7 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
     app.addHook('preHandler', sampleMiddleware.auth);
 
     app.get(
-        '/sample',
+        '/',
         {
             // preHandler: [sampleMiddleware.auth],
             schema: sampleSchema.getSamples,
@@ -30,7 +30,7 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
     );
 
     app.get(
-        '/sample/:id',
+        '/:id',
         {
             schema: sampleSchema.getSamples,
         },
@@ -49,7 +49,7 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
     );
 
     app.post(
-        '/sample',
+        '/',
         {
             schema: sampleSchema.getSamples,
         },

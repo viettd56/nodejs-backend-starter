@@ -4,7 +4,7 @@ import Fastify from 'fastify';
 import { sampleRoutes } from './domains/_sample/sample.router';
 import { Exception } from './helpers/Exception.helper';
 import { nanoid } from 'nanoid';
-import cors from '@fastify/cors';
+// import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import { logger } from './helpers/Logger.helper';
 import { healthCheckRoutes } from './domains/healthCheck/healthCheck.router';
@@ -28,18 +28,21 @@ const fastify = Fastify({
     trustProxy: true,
 });
 
-fastify.register(cors, {
-    origin: ['https://sample.com'],
-});
+// fastify.register(cors, {
+//     origin: ['https://sample.com'],
+// });
 
 fastify.register(helmet, { global: true });
 
 // Declare a route
-fastify.register(sampleRoutes, {
-    prefix: '/v1',
+fastify.register(healthCheckRoutes, {
+    prefix: '/',
 });
 
-fastify.register(healthCheckRoutes);
+fastify.register(sampleRoutes, {
+    prefix: '/v/sample',
+});
+
 fastify.setErrorHandler(function (err, request, reply) {
     const id = nanoid();
     // request.log.error({ err, id });
