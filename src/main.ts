@@ -40,7 +40,7 @@ fastify.register(healthCheckRoutes, {
 });
 
 fastify.register(sampleRoutes, {
-    prefix: '/v/sample',
+    prefix: '/v1/sample',
 });
 
 fastify.setErrorHandler(function (err, request, reply) {
