@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import { logger } from './helpers/Logger.helper';
+import { healthCheckRoutes } from './domains/healthCheck/healthCheck.router';
 
 // Override console.log
 console.log = (...args) => {
@@ -38,6 +39,7 @@ fastify.register(sampleRoutes, {
     prefix: '/v1',
 });
 
+fastify.register(healthCheckRoutes);
 fastify.setErrorHandler(function (err, request, reply) {
     const id = nanoid();
     // request.log.error({ err, id });
