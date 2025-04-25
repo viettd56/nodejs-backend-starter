@@ -8,8 +8,8 @@ import { nanoid } from 'nanoid';
 import helmet from '@fastify/helmet';
 import { logger } from './helpers/Logger.helper';
 import { healthCheckRoutes } from './domains/_shared/healthCheck/healthCheck.router';
-import { cmsLoginRoutes } from './domains/cms/login/login.router';
-import { mobileLoginRoutes } from './domains/mobile/login/login.router';
+import { cmsRoutes } from './domains/cms/cms.router';
+import { mobileRoutes } from './domains/mobile/mobile.router';
 
 // Override console.log
 console.log = (...args) => {
@@ -45,12 +45,12 @@ fastify.register(sampleRoutes, {
     prefix: '/v1/sample',
 });
 
-fastify.register(cmsLoginRoutes, {
-    prefix: '/v1/cms/login',
+fastify.register(cmsRoutes, {
+    prefix: '/v1/cms',
 });
 
-fastify.register(mobileLoginRoutes, {
-    prefix: '/v1/mobile/login',
+fastify.register(mobileRoutes, {
+    prefix: '/v1/mobile',
 });
 
 fastify.setErrorHandler(function (err, request, reply) {
