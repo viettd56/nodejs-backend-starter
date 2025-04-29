@@ -1,7 +1,7 @@
 import { FastifyPluginCallback } from 'fastify';
 import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { healthCheckService } from './healthCheck.service';
-import { commonSchema } from '../common/common.schema';
+import { commonSchema } from 'src/domains/_shared/common/common.schema';
 
 export const healthCheckRoutes: FastifyPluginCallback = (app) => {
     app.withTypeProvider<TypeBoxTypeProvider>().get(
