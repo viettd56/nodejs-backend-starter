@@ -8,3 +8,8 @@ export type SendRequestData = {
     body?: any;
     params?: any;
 };
+export type SendEmailData = {
+    to: string;
+    subject: string;
+    html: string;
+};

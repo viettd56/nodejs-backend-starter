@@ -1,7 +1,7 @@
 import { Worker } from 'bullmq';
 import { jobQueueConfig } from '../JobQueue.config';
 import { SendRequestData } from '../types';
-import { sendRequestQueue } from '../queue/SendRequest.queue';
+import { sendRequestQueue } from './SendRequest.queue';
 import axios from 'axios';
 
 export const SendRequestWorker = () => {
