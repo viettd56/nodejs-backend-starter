@@ -1,14 +1,12 @@
 import { commonSchema } from '../common/common.schema';
+import { Type } from '@sinclair/typebox';
 
 const SampleSchema = () => {
     const getSamples = {
         response: {
-            200: {
-                type: 'object',
-                properties: {
-                    status: { type: 'boolean' },
-                },
-            },
+            200: Type.Object({
+                status: Type.Boolean(),
+            }),
             default: commonSchema.responseDefault,
         },
     };

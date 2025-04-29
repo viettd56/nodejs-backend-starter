@@ -3,11 +3,10 @@ import { sampleMiddleware } from './sample.middleware';
 import { sampleSchema } from './sample.schema';
 import { sampleService } from './sample.service';
 import { Joi, ValidationHelper } from 'src/helpers/Validation.helper';
-
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 export const sampleRoutes: FastifyPluginCallback = (app) => {
     app.addHook('preHandler', sampleMiddleware.auth);
-
-    app.get(
+    app.withTypeProvider<TypeBoxTypeProvider>().get(
         '/',
         {
             // preHandler: [sampleMiddleware.auth],
@@ -29,7 +28,7 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
         },
     );
 
-    app.get(
+    app.withTypeProvider<TypeBoxTypeProvider>().get(
         '/:id',
         {
             schema: sampleSchema.getSamples,
@@ -48,7 +47,7 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
         },
     );
 
-    app.post(
+    app.withTypeProvider<TypeBoxTypeProvider>().post(
         '/',
         {
             schema: sampleSchema.getSamples,
