@@ -1,6 +1,5 @@
 import { FastifyPluginCallback } from 'fastify';
 import { sampleMiddleware } from './sample.middleware';
-import { sampleSchema } from './sample.schema';
 import { sampleService } from './sample.service';
 import { Joi, ValidationHelper } from 'src/helpers/Validation.helper';
 import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';

@@ -1,12 +1,21 @@
 import { FastifyPluginCallback } from 'fastify';
-import { healthCheckSchema } from './healthCheck.schema';
+import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { healthCheckService } from './healthCheck.service';
+import { commonSchema } from '../common/common.schema';
 
 export const healthCheckRoutes: FastifyPluginCallback = (app) => {
-    app.get(
+    app.withTypeProvider<TypeBoxTypeProvider>().get(
         '/',
         {
-            schema: healthCheckSchema.getHealthCheck,
+            schema: {
+                response: {
+                    200: Type.Object({
+                        status: Type.Boolean(),
+                        timestamp: Type.Number(),
+                    }),
+                    default: commonSchema.responseDefault,
+                },
+            },
         },
         async (req, res) => {
             const data = healthCheckService.check();
