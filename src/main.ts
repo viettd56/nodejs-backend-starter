@@ -65,6 +65,14 @@ fastify.setErrorHandler(function (err, request, reply) {
         });
         return;
     }
+    if (err.code === 'FST_ERR_VALIDATION') {
+        reply.status(400).send({
+            status: false,
+            message: err.message,
+            request_id: id,
+        });
+        return;
+    }
     reply.status(500).send({ status: false, message: 'Internal server error', request_id: id });
 });
 

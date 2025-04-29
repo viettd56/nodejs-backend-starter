@@ -3,24 +3,30 @@ import { sampleMiddleware } from './sample.middleware';
 import { sampleSchema } from './sample.schema';
 import { sampleService } from './sample.service';
 import { Joi, ValidationHelper } from 'src/helpers/Validation.helper';
-import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import { commonSchema } from '../common/common.schema';
 export const sampleRoutes: FastifyPluginCallback = (app) => {
     app.addHook('preHandler', sampleMiddleware.auth);
     app.withTypeProvider<TypeBoxTypeProvider>().get(
         '/',
         {
             // preHandler: [sampleMiddleware.auth],
-            schema: sampleSchema.getSamples,
+            schema: {
+                response: {
+                    200: Type.Object({
+                        status: Type.Boolean(),
+                    }),
+                    default: commonSchema.responseDefault,
+                },
+                querystring: Type.Object({
+                    offset: Type.Number({ default: 0 }),
+                    limit: Type.Number({ default: 10 }),
+                }),
+            },
         },
         async (req, res) => {
-            const { offset, limit } = new ValidationHelper<{
-                offset: number;
-                limit: number;
-            }>(req.query).validate({
-                offset: Joi.number().default(0),
-                limit: Joi.number().default(10),
-            });
-            console.log('🚀 ~ offset:', offset);
+            const { offset, limit } = req.query;
+            console.log('🚀 ~ offset:', { offset, limit });
             sampleService.logic();
             return {
                 status: true,
@@ -31,14 +37,20 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
     app.withTypeProvider<TypeBoxTypeProvider>().get(
         '/:id',
         {
-            schema: sampleSchema.getSamples,
+            schema: {
+                response: {
+                    200: Type.Object({
+                        status: Type.Boolean(),
+                    }),
+                    default: commonSchema.responseDefault,
+                },
+                params: Type.Object({
+                    id: Type.Number(),
+                }),
+            },
         },
         async (req, res) => {
-            const { id } = new ValidationHelper<{
-                id: number;
-            }>(req.params).validate({
-                id: Joi.number().default(0),
-            });
+            const { id } = req.params;
             console.log('🚀 ~ id:', id);
             sampleService.logic();
             return {
@@ -50,7 +62,17 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
     app.withTypeProvider<TypeBoxTypeProvider>().post(
         '/',
         {
-            schema: sampleSchema.getSamples,
+            schema: {
+                response: {
+                    200: Type.Object({
+                        status: Type.Boolean(),
+                    }),
+                    default: commonSchema.responseDefault,
+                },
+                body: Type.Object({
+                    id: Type.Optional(Type.Number()),
+                }),
+            },
         },
         async (req, res) => {
             const { id } = new ValidationHelper<{
