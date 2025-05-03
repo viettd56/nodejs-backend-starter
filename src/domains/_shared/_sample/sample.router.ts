@@ -18,8 +18,8 @@ export const sampleRoutes: FastifyPluginCallback = (app) => {
                     default: commonSchema.responseDefault,
                 },
                 querystring: Type.Object({
-                    offset: Type.Number({ default: 0 }),
-                    limit: Type.Number({ default: 10 }),
+                    offset: Type.Number({ default: 0, minimum: 0 }),
+                    limit: Type.Number({ default: 10, minimum: 0 }),
                 }),
             },
         },
