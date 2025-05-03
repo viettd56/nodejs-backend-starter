@@ -11,7 +11,7 @@ interface Attributes {
     email: string | null;
     name: string;
     username: string | null;
-    password: string | null;
+    password: string;
 }
 
 interface CreationAttributes extends Optional<Attributes, 'id'> {}
@@ -33,7 +33,7 @@ export class UserModel extends Model<Attributes, CreationAttributes> implements 
         type: DataType.STRING,
         primaryKey: true,
         defaultValue: () => {
-            return moment().unix().toString() + _.random(10000, 99999);
+            return 'U' + moment().unix().toString() + _.random(10000, 99999);
         },
     })
     declare id: string;
@@ -58,6 +58,6 @@ export class UserModel extends Model<Attributes, CreationAttributes> implements 
     })
     username!: string | null;
 
-    @Column({ type: DataType.STRING, allowNull: true })
-    password!: string | null;
+    @Column({ type: DataType.STRING, allowNull: false })
+    password!: string;
 }
