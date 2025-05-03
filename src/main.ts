@@ -10,6 +10,7 @@ import { logger } from './helpers/Logger.helper';
 import { healthCheckRoutes } from './domains/_shared/healthCheck/healthCheck.router';
 import { cmsRoutes } from './domains/cms/cms.router';
 import { mobileRoutes } from './domains/mobile/mobile.router';
+import { serverConfig } from './configs/Server.config';
 
 // Override console.log
 console.log = (...args) => {
@@ -57,37 +58,47 @@ fastify.setErrorHandler(function (err, request, reply) {
 
 const start = async () => {
     try {
-        // Đăng ký swagger trước khi lắng nghe cổng
-        await fastify.register(require('@fastify/swagger'), {
-            openapi: {
-                openapi: '3.0.0',
-                info: {
-                    title: 'Test swagger',
-                    description: 'Testing the Fastify swagger API',
-                    version: '0.1.0',
-                },
-                servers: [
-                    {
-                        url: 'http://localhost:3000',
-                        description: 'Development server',
+        if (serverConfig.SHOW_SWAGGER) {
+            // Đăng ký swagger trước khi lắng nghe cổng
+            await fastify.register(require('@fastify/swagger'), {
+                openapi: {
+                    openapi: '3.0.0',
+                    info: {
+                        title: 'Test swagger',
+                        description: 'Testing the Fastify swagger API',
+                        version: '0.1.0',
                     },
-                ],
-                components: {
-                    securitySchemes: {
-                        bearerAuth: {
-                            type: 'http',
-                            scheme: 'bearer',
-                            bearerFormat: 'JWT',
+                    servers: [
+                        {
+                            url: 'http://localhost:3000',
+                            description: 'Development server',
+                        },
+                    ],
+                    components: {
+                        securitySchemes: {
+                            bearerAuth: {
+                                type: 'http',
+                                scheme: 'bearer',
+                                bearerFormat: 'JWT',
+                            },
                         },
                     },
+                    externalDocs: {
+                        url: 'https://swagger.io',
+                        description: 'Find more info here',
+                    },
                 },
-                externalDocs: {
-                    url: 'https://swagger.io',
-                    description: 'Find more info here',
+            });
+            // Đăng ký swagger UI
+            await fastify.register(import('@fastify/swagger-ui'), {
+                routePrefix: '/documentation',
+                uiConfig: {
+                    docExpansion: 'list',
+                    deepLinking: false,
                 },
-            },
-        });
-
+            });
+            console.log(`API Documentation available at http://localhost:3000/documentation`);
+        }
         // Declare a route
         fastify.register(healthCheckRoutes, {
             prefix: '',
@@ -105,18 +116,8 @@ const start = async () => {
             prefix: '/v1/mobile',
         });
 
-        // Đăng ký swagger UI
-        await fastify.register(import('@fastify/swagger-ui'), {
-            routePrefix: '/documentation',
-            uiConfig: {
-                docExpansion: 'list',
-                deepLinking: false,
-            },
-        });
-
         await fastify.listen({ port: 3000 });
         console.log(`Server listening at 3000`);
-        console.log(`API Documentation available at http://localhost:3000/documentation`);
     } catch (err) {
         fastify.log.error(err);
         process.exit(1);

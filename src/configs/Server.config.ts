@@ -5,6 +5,7 @@ interface IConfigs {
     DEV_KEY: string;
     IS_DEV: boolean;
     IS_DEBUG: boolean;
+    SHOW_SWAGGER: boolean;
 }
 const ServerConfig = () => {
     return new ValidationHelper<IConfigs>(process.env).validate({
@@ -12,6 +13,7 @@ const ServerConfig = () => {
         DEV_KEY: Joi.string(),
         IS_DEV: Joi.boolean().required(),
         IS_DEBUG: Joi.boolean().default(false),
+        SHOW_SWAGGER: Joi.boolean().default(false),
     });
 };
 
