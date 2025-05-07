@@ -1,8 +1,11 @@
 import { FastifyInstance } from 'fastify';
 import { nanoid } from 'nanoid';
 import { Exception } from 'src/helpers/Exception.helper';
+import helmet from '@fastify/helmet';
 
 const FastifyService = () => {
+    const fastifyBasicAuth = require('@fastify/basic-auth');
+
     const setErrorHandler = (fastify: FastifyInstance) => {
         fastify.setErrorHandler(function (err, request, reply) {
             const id = nanoid();
@@ -34,8 +37,30 @@ const FastifyService = () => {
         });
     };
 
+    // Hàm xác thực
+    async function validate(username, password, req, reply) {
+        if (username !== 'admin' || password !== 'password') {
+            throw new Error('FST_BASIC_AUTH_MISSING_OR_BAD_AUTHORIZATION_HEADER');
+        }
+    }
+
+    const setBasicAuth = (fastify: FastifyInstance) => {
+        // Đăng ký plugin
+        fastify.register(fastifyBasicAuth, { validate, authenticate: true });
+    };
+
+    const setCommonMiddleware = (fastify: FastifyInstance) => {
+        fastify.register(helmet, { global: true });
+
+        fastify.addHook('preHandler', async (request, reply) => {
+            request.locals = {};
+        });
+    };
+
     return {
         setErrorHandler,
+        setBasicAuth,
+        setCommonMiddleware,
     };
 };
 

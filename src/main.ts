@@ -2,10 +2,6 @@
 require('dotenv').config();
 import Fastify from 'fastify';
 import { sampleRoutes } from './domains/_shared/_sample/sample.router';
-import { Exception } from './helpers/Exception.helper';
-import { nanoid } from 'nanoid';
-// import cors from '@fastify/cors';
-import helmet from '@fastify/helmet';
 import { logger } from './helpers/Logger.helper';
 import { healthCheckRoutes } from './domains/_shared/healthCheck/healthCheck.router';
 import { cmsRoutes } from './domains/cms/cms.router';
@@ -13,15 +9,6 @@ import { mobileRoutes } from './domains/mobile/mobile.router';
 import { serverConfig } from './configs/Server.config';
 import { swaggerService } from './domains/_shared/swagger/swagger.service';
 import { fastifyService } from './domains/_shared/fastify/fastify.service';
-
-const fastifyBasicAuth = require('@fastify/basic-auth');
-
-// Hàm xác thực
-async function validate(username, password, req, reply) {
-    if (username !== 'admin' || password !== 'password') {
-        throw new Error('FST_BASIC_AUTH_MISSING_OR_BAD_AUTHORIZATION_HEADER');
-    }
-}
 
 // Override console.log
 console.log = (...args) => {
@@ -42,11 +29,8 @@ const fastify = Fastify({
     trustProxy: true,
 });
 
-fastify.register(helmet, { global: true });
-
-// Đăng ký plugin
-fastify.register(fastifyBasicAuth, { validate, authenticate: true });
-
+fastifyService.setCommonMiddleware(fastify);
+fastifyService.setBasicAuth(fastify);
 fastifyService.setErrorHandler(fastify);
 
 const start = async () => {
@@ -55,10 +39,6 @@ const start = async () => {
             await swaggerService.registerSwagger(fastify);
             console.log(`API Documentation available at http://localhost:3000/documentation`);
         }
-
-        fastify.addHook('preHandler', async (request, reply) => {
-            request.locals = {};
-        });
 
         // Declare a route
         fastify.register(healthCheckRoutes, {
