@@ -12,6 +12,16 @@ import { cmsRoutes } from './domains/cms/cms.router';
 import { mobileRoutes } from './domains/mobile/mobile.router';
 import { serverConfig } from './configs/Server.config';
 import { swaggerService } from './domains/_shared/swagger/swagger.service';
+import { fastifyService } from './domains/_shared/fastify/fastify.service';
+
+const fastifyBasicAuth = require('@fastify/basic-auth');
+
+// Hàm xác thực
+async function validate(username, password, req, reply) {
+    if (username !== 'admin' || password !== 'password') {
+        throw new Error('FST_BASIC_AUTH_MISSING_OR_BAD_AUTHORIZATION_HEADER');
+    }
+}
 
 // Override console.log
 console.log = (...args) => {
@@ -34,28 +44,10 @@ const fastify = Fastify({
 
 fastify.register(helmet, { global: true });
 
-fastify.setErrorHandler(function (err, request, reply) {
-    const id = nanoid();
-    // request.log.error({ err, id });
-    console.error({ err, id });
-    if (err instanceof Exception) {
-        reply.status(500).send({
-            status: false,
-            message: err.message,
-            request_id: id,
-        });
-        return;
-    }
-    if (err.code === 'FST_ERR_VALIDATION') {
-        reply.status(400).send({
-            status: false,
-            message: err.message,
-            request_id: id,
-        });
-        return;
-    }
-    reply.status(500).send({ status: false, message: 'Internal server error', request_id: id });
-});
+// Đăng ký plugin
+fastify.register(fastifyBasicAuth, { validate, authenticate: true });
+
+fastifyService.setErrorHandler(fastify);
 
 const start = async () => {
     try {

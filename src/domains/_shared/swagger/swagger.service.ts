@@ -40,6 +40,9 @@ const SwaggerService = () => {
                 docExpansion: 'list',
                 deepLinking: false,
             },
+            uiHooks: {
+                onRequest: (fastify as any).basicAuth,
+            },
         });
     };
 
