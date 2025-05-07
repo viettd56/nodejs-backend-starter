@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { nanoid } from 'nanoid';
 import { Exception } from 'src/helpers/Exception.helper';
 import helmet from '@fastify/helmet';
+import { serverConfig } from 'src/configs/Server.config';
 
 const FastifyService = () => {
     const fastifyBasicAuth = require('@fastify/basic-auth');
@@ -37,14 +38,14 @@ const FastifyService = () => {
         });
     };
 
-    // Hàm xác thực
-    async function validate(username, password, req, reply) {
-        if (username !== 'admin' || password !== 'password') {
+    const setBasicAuth = (fastify: FastifyInstance) => {
+        // Hàm xác thực
+        async function validate(username, password, req, reply) {
+            if (username === 'admin' && password === serverConfig.AUTH_KEY) {
+                return true;
+            }
             throw new Error('FST_BASIC_AUTH_MISSING_OR_BAD_AUTHORIZATION_HEADER');
         }
-    }
-
-    const setBasicAuth = (fastify: FastifyInstance) => {
         // Đăng ký plugin
         fastify.register(fastifyBasicAuth, { validate, authenticate: true });
     };
