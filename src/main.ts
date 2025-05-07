@@ -99,6 +99,11 @@ const start = async () => {
             });
             console.log(`API Documentation available at http://localhost:3000/documentation`);
         }
+
+        fastify.addHook('preHandler', (request, reply) => {
+            request.locals = {};
+        });
+
         // Declare a route
         fastify.register(healthCheckRoutes, {
             prefix: '',

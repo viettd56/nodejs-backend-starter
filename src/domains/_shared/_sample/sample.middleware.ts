@@ -3,10 +3,8 @@ import { sampleService } from './sample.service';
 
 const SampleMiddleware = () => {
     const auth: RouteHandler = async (request, reply) => {
-        request.user = {
-            user_id: 'sample',
-        };
-        request.logged = true;
+        request.locals.user_id = 'sample';
+        request.locals.logged = true;
         sampleService.logic();
     };
 
