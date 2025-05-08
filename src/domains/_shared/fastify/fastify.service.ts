@@ -41,10 +41,9 @@ const FastifyService = () => {
     const setBasicAuth = (fastify: FastifyInstance) => {
         // Hàm xác thực
         async function validate(username, password, req, reply) {
-            if (username === 'admin' && password === serverConfig.AUTH_KEY) {
-                return true;
+            if (username !== 'admin' || password !== serverConfig.AUTH_KEY) {
+                throw new Error('FST_BASIC_AUTH_MISSING_OR_BAD_AUTHORIZATION_HEADER');
             }
-            throw new Error('FST_BASIC_AUTH_MISSING_OR_BAD_AUTHORIZATION_HEADER');
         }
         // Đăng ký plugin
         fastify.register(fastifyBasicAuth, { validate, authenticate: true });

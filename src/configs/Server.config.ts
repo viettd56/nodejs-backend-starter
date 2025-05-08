@@ -9,8 +9,8 @@ interface IConfigs {
 }
 const ServerConfig = () => {
     return new ValidationHelper<IConfigs>(process.env).validate({
-        AUTH_KEY: Joi.string(),
-        DEV_KEY: Joi.string(),
+        AUTH_KEY: Joi.string().required(),
+        DEV_KEY: Joi.string().required(),
         IS_DEV: Joi.boolean().required(),
         IS_DEBUG: Joi.boolean().default(false),
         SHOW_SWAGGER: Joi.boolean().default(false),
