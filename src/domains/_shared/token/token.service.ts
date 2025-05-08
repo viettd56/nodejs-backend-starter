@@ -5,26 +5,26 @@ type Payload = {
     user_id: string;
     token_type: 'ACCESS_TOKEN' | 'REFRESH_TOKEN';
 };
-const TokenService = () => {
+const TokenService = (config: { private_key: string; public_key: string; issuer: string }) => {
     const sign = (payload: Payload, expiresIn: string | number = '1d', audience: string) => {
-        if (!tokenJWTConfig.JWT_PRIVATE_KEY) {
+        if (!config.private_key) {
             throw new Error('jwt secret is undefined');
         }
-        return jwt.sign(payload, Buffer.from(tokenJWTConfig.JWT_PRIVATE_KEY, 'base64').toString('utf-8'), {
+        return jwt.sign(payload, config.private_key, {
             algorithm: 'RS256',
             expiresIn: expiresIn as any,
             audience,
-            issuer: tokenJWTConfig.JWT_ISSUER,
+            issuer: config.issuer,
         });
     };
     const verify = (token: string, audience: string) => {
-        if (!tokenJWTConfig.JWT_PUBLIC_KEY) {
+        if (!config.public_key) {
             throw new Error('jwt secret is undefined');
         }
-        return jwt.verify(token, Buffer.from(tokenJWTConfig.JWT_PUBLIC_KEY, 'base64').toString('utf-8'), {
+        return jwt.verify(token, config.public_key, {
             algorithms: ['RS256'],
             audience,
-            issuer: tokenJWTConfig.JWT_ISSUER,
+            issuer: config.issuer,
         }) as Payload;
     };
 
@@ -34,4 +34,8 @@ const TokenService = () => {
     };
 };
 
-export const tokenService = TokenService();
+export const tokenService = TokenService({
+    private_key: Buffer.from(tokenJWTConfig.JWT_PRIVATE_KEY, 'base64').toString('utf-8'),
+    public_key: Buffer.from(tokenJWTConfig.JWT_PUBLIC_KEY, 'base64').toString('utf-8'),
+    issuer: tokenJWTConfig.JWT_ISSUER,
+});
