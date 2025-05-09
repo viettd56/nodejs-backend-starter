@@ -1,6 +1,6 @@
 import { Queue } from 'bullmq';
-import { jobQueueConfig } from '../JobQueue.config';
 import { SendRequestData } from '../types';
+import { jobQueueConfig } from 'src/domains/_shared/jobQueue/JobQueue.config';
 
 const QUEUE_NAME = 'send_request';
 
