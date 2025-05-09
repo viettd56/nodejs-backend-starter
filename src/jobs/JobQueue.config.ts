@@ -1,18 +1,23 @@
 import { ConnectionOptions, QueueOptions, MetricsTime, WorkerOptions, MinimalJob } from 'bullmq';
 import { redisConfig } from 'src/configs/Redis.config';
 
-const JobQueueConfig = () => {
-    const { REDIS_BULL_HOST, REDIS_BULL_PASSWORD, REDIS_BULL_PORT, REDIS_BULL_PREFIX, REDIS_BULL_TLS } = redisConfig;
+const JobQueueConfig = (redisConfig: {
+    host: string;
+    port: number;
+    password: string;
+    keyPrefix: string;
+    tls: boolean;
+}) => {
     const connection: ConnectionOptions = {
         // enableOfflineQueue: false,
-        host: REDIS_BULL_HOST,
-        port: REDIS_BULL_PORT,
-        password: REDIS_BULL_PASSWORD,
+        host: redisConfig.host,
+        port: redisConfig.port,
+        password: redisConfig.password,
         // db: REDIS_BULL_DB,
         // enableReadyCheck: false,
         // maxRetriesPerRequest: null,
         // db: 10,
-        tls: REDIS_BULL_TLS === true ? {} : undefined,
+        tls: redisConfig.tls === true ? {} : undefined,
     };
 
     const queueOpts: QueueOptions = {
@@ -21,14 +26,14 @@ const JobQueueConfig = () => {
             removeOnComplete: 100,
             removeOnFail: 100000,
         },
-        prefix: REDIS_BULL_PREFIX,
+        prefix: redisConfig.keyPrefix,
     };
 
     const workerOpts: WorkerOptions = {
         autorun: false,
         concurrency: 3,
         connection,
-        prefix: REDIS_BULL_PREFIX,
+        prefix: redisConfig.keyPrefix,
         metrics: {
             maxDataPoints: MetricsTime.ONE_WEEK * 2,
         },
@@ -68,4 +73,10 @@ const JobQueueConfig = () => {
         failedHandler,
     };
 };
-export const jobQueueConfig = JobQueueConfig();
+export const jobQueueConfig = JobQueueConfig({
+    host: redisConfig.REDIS_BULL_HOST,
+    port: redisConfig.REDIS_BULL_PORT,
+    password: redisConfig.REDIS_BULL_PASSWORD,
+    keyPrefix: redisConfig.REDIS_BULL_PREFIX,
+    tls: redisConfig.REDIS_BULL_TLS,
+});

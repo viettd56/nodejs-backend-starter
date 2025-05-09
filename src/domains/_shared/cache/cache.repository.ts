@@ -7,29 +7,24 @@ const CacheRepository = (redisConfig: {
     keyPrefix: string;
     tls: boolean;
 }) => {
-    const createRedis = () => {
-        const redis = new Redis({
-            host: redisConfig.host,
-            port: redisConfig.port,
-            password: redisConfig.password,
-            keyPrefix: redisConfig.keyPrefix,
-            tls: redisConfig.tls === true ? {} : undefined,
-            // db: REDIS_CACHE_DB,
-            // db: 10,
-        });
+    const redis = new Redis({
+        host: redisConfig.host,
+        port: redisConfig.port,
+        password: redisConfig.password,
+        keyPrefix: redisConfig.keyPrefix,
+        tls: redisConfig.tls === true ? {} : undefined,
+        // db: REDIS_CACHE_DB,
+        // db: 10,
+    });
 
-        // const close = () => {
-        //     redis.quit();
-        // };
+    // const close = () => {
+    //     redis.quit();
+    // };
 
-        redis.on('error', (e) => {
-            console.log('Redis connect error', e);
-        });
-        return redis;
-    };
-    return {
-        createRedis,
-    };
+    redis.on('error', (e) => {
+        console.log('Redis connect error', e);
+    });
+    return { redis };
 };
 
 export const cacheRepository = CacheRepository({

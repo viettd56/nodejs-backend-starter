@@ -3,7 +3,7 @@ import { RedisCache } from './RedisCache';
 import { cacheRepository } from './cache.repository';
 
 const CacheService = () => {
-    const cacheRedis = cacheRepository.createRedis();
+    const cacheRedis = cacheRepository.redis;
 
     const OtherCache = (ttl: number) => {
         const cache = new RedisCache(cacheRedis, 'other:', ttl);
