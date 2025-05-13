@@ -19,7 +19,7 @@ interface CreationAttributes extends Optional<Attributes, 'id'> {}
 @Table({
     defaultScope: {
         attributes: {
-            exclude: ['createdAt', 'updatedAt'],
+            exclude: ['created_at', 'updated_at'],
         },
     },
     timestamps: true,
