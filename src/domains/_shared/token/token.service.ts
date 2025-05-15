@@ -12,7 +12,7 @@ const TokenService = (config: { private_key: string; public_key: string; issuer:
     });
     const sign = (payload: Payload, expiresIn: string | number = '1d', audience: string) => {
         if (!config.private_key) {
-            throw new Error('jwt secret is undefined');
+            throw new Error('jwt private key is undefined');
         }
         return jwt.sign(payload, config.private_key, {
             algorithm: 'RS256',
@@ -23,7 +23,7 @@ const TokenService = (config: { private_key: string; public_key: string; issuer:
     };
     const verify = (token: string, audience: string) => {
         if (!config.public_key) {
-            throw new Error('jwt secret is undefined');
+            throw new Error('jwt public key is undefined');
         }
         const cacheKey = `token:${token}:${audience}`;
         const cachedData = cache.get(cacheKey);
