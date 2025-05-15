@@ -25,7 +25,7 @@ const TokenService = (config: { private_key: string; public_key: string; issuer:
         if (!config.public_key) {
             throw new Error('jwt secret is undefined');
         }
-        const cacheKey = `token:${token}`;
+        const cacheKey = `token:${token}:${audience}`;
         const cachedData = cache.get(cacheKey);
         if (cachedData) {
             return cachedData;
