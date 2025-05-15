@@ -1,11 +1,15 @@
 import jwt from 'jsonwebtoken';
 import { tokenJWTConfig } from 'src/configs/TokenJWT.config';
+import NodeCache from 'node-cache';
 
 type Payload = {
     user_id: string;
     token_type: 'ACCESS_TOKEN' | 'REFRESH_TOKEN';
 };
 const TokenService = (config: { private_key: string; public_key: string; issuer: string }) => {
+    const cache = new NodeCache({
+        stdTTL: 60,
+    });
     const sign = (payload: Payload, expiresIn: string | number = '1d', audience: string) => {
         if (!config.private_key) {
             throw new Error('jwt secret is undefined');
@@ -21,11 +25,19 @@ const TokenService = (config: { private_key: string; public_key: string; issuer:
         if (!config.public_key) {
             throw new Error('jwt secret is undefined');
         }
-        return jwt.verify(token, config.public_key, {
+        const cacheKey = `token:${token}`;
+        const cachedData = cache.get(cacheKey);
+        if (cachedData) {
+            return cachedData;
+        }
+        const data = jwt.verify(token, config.public_key, {
             algorithms: ['RS256'],
             audience,
             issuer: config.issuer,
         }) as Payload;
+
+        cache.set(cacheKey, data);
+        return data;
     };
 
     return {

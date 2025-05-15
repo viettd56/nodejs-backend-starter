@@ -41,6 +41,7 @@
         "lodash": "^4.17.21",
         "moment-timezone": "^0.5.48",
         "nanoid": "3.3.11",
+        "node-cache": "^5.1.2",
         "pg": "^8.15.1",
         "pg-connection-string": "^2.8.1",
         "pino": "^9.6.0",
