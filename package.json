@@ -86,7 +86,7 @@
             "ts"
         ],
         "rootDir": "src",
-        "testRegex": ".*\\.spec\\.ts$",
+        "testRegex": ".*\\.spec|test\\.ts$",
         "transform": {
             "^.+\\.(t|j)s$": "ts-jest"
         },
@@ -94,6 +94,9 @@
             "**/*.(t|j)s"
         ],
         "coverageDirectory": "../coverage",
+        "moduleNameMapper": {
+            "^src/(.*)$": "<rootDir>/$1"
+        },
         "testEnvironment": "node"
     },
     "resolutions": {
