@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { parse } from 'pg-connection-string';
 import { UserModel } from './data/User.model';
 import { databaseConfig } from 'src/configs/Database.config';
-import { SampleModel } from './data/Sample.model';
+import { SampleModel } from './Sample.model';
 
 const models = [UserModel, SampleModel];
 

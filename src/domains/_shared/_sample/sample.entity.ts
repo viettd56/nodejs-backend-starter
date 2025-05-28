@@ -1,4 +1,4 @@
-import { SampleModel } from "src/models/data/Sample.model";
+import { SampleModel } from "src/models/Sample.model";
 
 export class SampleEntity {
     private id: string;

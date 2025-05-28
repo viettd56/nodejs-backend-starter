@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { SampleEntity } from "./sample.entity";
-import { SampleModel } from "src/models/data/Sample.model";
+import { SampleModel } from "src/models/Sample.model";
 import { Transaction } from "sequelize";
 import { sequelize } from "src/models/sequelize";
 import { Exception } from "src/helpers/Exception.helper";
