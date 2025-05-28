@@ -20,7 +20,6 @@ interface CreationAttributes extends Optional<Attributes, 'id'> {}
         },
     },
     timestamps: true,
-    schema: 'data',
     underscored: true,
     modelName: 'samples',
     paranoid: true,
