@@ -16,10 +16,11 @@ const SampleService = () => {
     };
 
     const clearName = async (id: string) => {
-        await sequelize.transaction(async (t) => {
-            const sample = await sampleRepository.findByIdWithLock(id, t);
+        const transaction = await sampleRepository.getTransaction();
+        try {
+            // Tìm và lock bản ghi để ngăn các thao tác khác cập nhật cho đến khi hoàn thành
+            const sample = await sampleRepository.findByIdWithLock(id, transaction);
             if (!sample) {
-                await t.rollback();
                 throw new Exception('Sample not found');
             }
             
@@ -27,10 +28,16 @@ const SampleService = () => {
             sampleEntity.clearName();
             
             // Cập nhật trong cùng transaction để giữ lock
-            await sampleRepository.update(sampleEntity, sample, t);
+            await sampleRepository.update(sampleEntity, sample, transaction);
             
-        })
-     
+            // Commit transaction để hoàn thành và giải phóng lock
+            await transaction.commit();
+            return true;
+        } catch (error) {
+            // Rollback transaction nếu có lỗi
+            await transaction.rollback();
+            throw error;
+        }
     };
 
     return {

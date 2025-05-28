@@ -30,13 +30,16 @@ const SampleRepository = () => {
         });
     };
     
-  
+    const getTransaction = async () => {
+        return sequelize.transaction();
+    };
 
     return {
         logic,
         update,
         findById,
         findByIdWithLock,
+        getTransaction
     };
 };
 
