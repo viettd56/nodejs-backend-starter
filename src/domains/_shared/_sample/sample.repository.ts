@@ -29,17 +29,13 @@ const SampleRepository = () => {
             lock: transaction.LOCK.UPDATE
         });
     };
-    
-    const getTransaction = async () => {
-        return sequelize.transaction();
-    };
 
     return {
         logic,
         update,
         findById,
         findByIdWithLock,
-        getTransaction
+        getTransaction: sequelize.transaction
     };
 };
 

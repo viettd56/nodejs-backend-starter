@@ -1,16 +1,25 @@
 import { sampleRepository } from './sample.repository';
 import { sampleService } from './sample.service';
 import { SampleEntity } from './sample.entity';
-import { sequelize } from 'src/models/sequelize';
 import { Exception } from 'src/helpers/Exception.helper';
 
 // Mock the sampleRepository
+const mockTransaction = {
+  LOCK: {
+    UPDATE: 'UPDATE',
+  },
+  commit: jest.fn().mockResolvedValue(undefined),
+  rollback: jest.fn().mockResolvedValue(undefined),
+};
+
 jest.mock('./sample.repository', () => ({
   sampleRepository: {
     logic: jest.fn(),
     findByIdWithLock: jest.fn(),
     update: jest.fn(),
-    getTransaction: jest.fn(),
+    getTransaction: jest.fn().mockImplementation((callback) => {
+      return callback(mockTransaction);
+    }),
   },
 }));
 
@@ -19,25 +28,16 @@ describe('SampleService', () => {
   let mockFindByIdWithLock: jest.SpyInstance;
   let mockUpdate: jest.SpyInstance;
   let mockGetTransaction: jest.SpyInstance;
-  let mockTransaction: any;
 
   beforeEach(() => {
     // Create fresh spies before each test
     mockRepositoryLogic = jest.spyOn(sampleRepository, 'logic');
     mockFindByIdWithLock = jest.spyOn(sampleRepository, 'findByIdWithLock');
     mockUpdate = jest.spyOn(sampleRepository, 'update');
+    mockGetTransaction = jest.spyOn(sampleRepository, 'getTransaction');
     
-    // Setup transaction mock
-    mockTransaction = {
-      LOCK: {
-        UPDATE: 'UPDATE',
-      },
-      commit: jest.fn().mockResolvedValue(undefined),
-      rollback: jest.fn().mockResolvedValue(undefined),
-    };
-    
-    mockGetTransaction = jest.spyOn(sampleRepository, 'getTransaction')
-      .mockResolvedValue(mockTransaction);
+    // Reset all mocks
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
@@ -100,19 +100,16 @@ describe('SampleService', () => {
       });
 
       // Act
-      const result = await sampleService.clearName(sampleId);
+      await sampleService.clearName(sampleId);
 
       // Assert
-      expect(mockGetTransaction).toHaveBeenCalled();
+      expect(mockGetTransaction).toHaveBeenCalledWith(expect.any(Function));
       expect(mockFindByIdWithLock).toHaveBeenCalledWith(sampleId, mockTransaction);
       expect(mockUpdate).toHaveBeenCalledWith(
         expect.any(SampleEntity),
         mockSample,
         mockTransaction
       );
-      expect(mockTransaction.commit).toHaveBeenCalled();
-      expect(mockTransaction.rollback).not.toHaveBeenCalled();
-      expect(result).toBe(true);
       expect(mockSample.name).toBe('');
     });
 
@@ -122,8 +119,7 @@ describe('SampleService', () => {
 
       // Act & Assert
       await expect(sampleService.clearName(sampleId)).rejects.toThrow('Sample not found');
-      expect(mockTransaction.rollback).toHaveBeenCalled();
-      expect(mockTransaction.commit).not.toHaveBeenCalled();
+      expect(mockFindByIdWithLock).toHaveBeenCalledWith(sampleId, mockTransaction);
     });
 
     it('should handle transaction errors', async () => {
@@ -133,8 +129,7 @@ describe('SampleService', () => {
 
       // Act & Assert
       await expect(sampleService.clearName(sampleId)).rejects.toThrow(testError);
-      expect(mockTransaction.rollback).toHaveBeenCalled();
-      expect(mockTransaction.commit).not.toHaveBeenCalled();
+      expect(mockFindByIdWithLock).toHaveBeenCalledWith(sampleId, mockTransaction);
     });
   });
 });
