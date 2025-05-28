@@ -132,6 +132,4 @@ Các cấu hình cho ứng dụng:
    - `*.middleware.ts`: Middleware xử lý trước/sau request
    - `*.service.spec.ts`: Unit tests
 
-2. Theo thông tin đã lưu trữ, một số file đã được đổi tên từ 'sample' sang 'workspace' trong thư mục `src/domains/cms/workspace`, tuy nhiên thư mục này không hiển thị trong cấu trúc hiện tại.
-
-3. Swagger được sử dụng để tạo tài liệu API tự động, có thể truy cập tại `http://localhost:3000/documentation` khi server đang chạy và `SHOW_SWAGGER` được bật trong cấu hình.
+2. Swagger được sử dụng để tạo tài liệu API tự động, có thể truy cập tại `http://localhost:3000/documentation` khi server đang chạy và `SHOW_SWAGGER` được bật trong cấu hình.

@@ -1,4 +1,5 @@
 import { sampleRepository } from "src/domains/_shared/_sample/sample.repository";
+import { SampleEntity } from "./sample.entity";
 
 const SampleService = () => {
     const logic = async () => {
@@ -12,8 +13,19 @@ const SampleService = () => {
         }
     };
 
+    const clearName = async (id: string) => {
+        const sample = await sampleRepository.findById(id);
+        if (!sample) {
+            throw new Error('Sample not found');
+        }
+        const sampleEntity = SampleEntity.fromObjectModel(sample);
+        sampleEntity.clearName();
+        return sampleRepository.update(sampleEntity);
+    };
+
     return {
         logic,
+        clearName,
     };
 };
 

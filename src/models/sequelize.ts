@@ -2,8 +2,9 @@ import { Sequelize } from 'sequelize-typescript';
 import { parse } from 'pg-connection-string';
 import { UserModel } from './data/User.model';
 import { databaseConfig } from 'src/configs/Database.config';
+import { SampleModel } from './data/Sample.model';
 
-const models = [UserModel];
+const models = [UserModel, SampleModel];
 
 const dialectOptions =
     process.env.PG_SSL === 'true'
