@@ -7,6 +7,7 @@ export class UserEntity {
     private _name: string;
     private _username: string | null;
     private _password: string;
+    private _has_transaction_lock: boolean;
 
     constructor({
         id,
@@ -14,18 +15,21 @@ export class UserEntity {
         username,
         password,
         email,
+        has_transaction_lock,
     }: {
         id: string;
         name: string;
         username: string | null;
         password: string;
         email: string | null;
+        has_transaction_lock: boolean;
     }) {
         this._id = id;
         this._name = name;
         this._username = username;
         this._password = password;
         this._email = email;
+        this._has_transaction_lock = has_transaction_lock;
     }
 
     public get id() {
@@ -48,20 +52,18 @@ export class UserEntity {
         return this._password;
     }
 
-    public toObject() {
-        return {
-            id: this._id,
-            name: this._name,
-        };
+    public get has_transaction_lock() {
+        return this._has_transaction_lock;
     }
 
-    public static modelToEntity(obj: UserModel) {
+    public static modelToEntity(obj: UserModel, has_transaction_lock: boolean) {
         return new UserEntity({
             id: obj.id,
             name: obj.name,
             username: obj.username,
             password: obj.password,
             email: obj.email,
+            has_transaction_lock,
         });
     }
 

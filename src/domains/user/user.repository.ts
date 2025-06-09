@@ -1,74 +1,56 @@
-import { Transaction } from 'sequelize';
-import { bcryptHelper } from 'src/helpers/Bcrypt.helper';
+import _ from 'lodash';
 import { UserModel } from 'src/models/data/User.model';
+import { Transaction } from 'sequelize';
+import { Exception } from 'src/helpers/Exception.helper';
+import { UserEntity } from './user.entity';
 
 const UserRepository = () => {
-    const newUser = async (
-        {
-            name,
-            email,
-            password,
-            username,
-        }: {
-            email?: string;
-            name: string;
-            username?: string;
-            password: string;
-        },
-        {
-            transaction,
-        }: {
-            transaction?: Transaction;
-        } = {},
-    ) => {
-        const user = await UserModel.create(
+    const update = async (data: UserEntity, transaction?: Transaction) => {
+        const { id, name, has_transaction_lock, email, password, username } = data;
+        if (has_transaction_lock === true && !transaction) {
+            throw new Exception('Transaction is required');
+        }
+        await UserModel.update(
             {
                 name,
                 email,
-                password: await bcryptHelper.hashPassword(password),
-                extra_data: {},
+                password,
                 username,
             },
             {
+                where: {
+                    id,
+                },
                 transaction,
             },
         );
-        return user;
+        return true;
     };
 
-    const updateUser = async (
-        {
-            name,
-            id,
-        }: {
-            id: string;
-            name?: string;
-        },
-        {
-            transaction,
-        }: {
-            transaction?: Transaction;
-        } = {},
-    ) => {
-        const user = await UserModel.findByPk(id, {
-            transaction,
-            lock: transaction?.LOCK.UPDATE,
-        });
-        if (!user) {
-            throw new Error('User not found');
+    const findById = async (id: string) => {
+        const data = await UserModel.findByPk(id);
+        if (!data) {
+            throw new Exception('User not found');
         }
-        if (name !== undefined) {
-            user.name = name;
-        }
-        await user.save({
+        return UserEntity.modelToEntity(data, false);
+    };
+
+    const findByIdWithLock = async (id: string, transaction: Transaction) => {
+        const data = await UserModel.findByPk(id, {
             transaction,
+            lock: transaction.LOCK.UPDATE,
         });
-        return user;
+
+        if (!data) {
+            throw new Exception('User not found');
+        }
+        return UserEntity.modelToEntity(data, true);
     };
 
     return {
-        newUser,
-        updateUser,
+        update,
+        findById,
+        findByIdWithLock,
     };
 };
 

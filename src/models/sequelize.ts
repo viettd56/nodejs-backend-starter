@@ -24,7 +24,7 @@ const dialectOptions =
 const dbWriteParse = parse(databaseConfig.DATABASE_URL, {});
 const listDbReadParse = databaseConfig.DATABASE_READ_URL.split(';');
 
-export const sequelize: Sequelize = new Sequelize(databaseConfig.DATABASE_URL, {
+const sequelize: Sequelize = new Sequelize(databaseConfig.DATABASE_URL, {
     dialect: 'postgres',
     logging: false,
     timezone: '+07:00',
@@ -60,3 +60,5 @@ export const sequelize: Sequelize = new Sequelize(databaseConfig.DATABASE_URL, {
         max: Infinity,
     },
 });
+
+export { sequelize };

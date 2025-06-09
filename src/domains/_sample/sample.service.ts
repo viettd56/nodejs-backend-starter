@@ -1,7 +1,7 @@
 import { sampleRepository } from 'src/domains/_sample/sample.repository';
-import { SampleEntity } from './sample.entity';
 import { Exception } from 'src/helpers/Exception.helper';
 import _ from 'lodash';
+import { sequelize } from 'src/models/sequelize';
 
 const SampleService = () => {
     const logic = async () => {
@@ -16,7 +16,7 @@ const SampleService = () => {
     };
 
     const clearName = async (id: string) => {
-        await sampleRepository.getTransaction(async (transaction) => {
+        await sequelize.transaction(async (transaction) => {
             const sampleEntity = await sampleRepository.findByIdWithLock(id, transaction);
             if (!sampleEntity) {
                 throw new Exception('Sample not found');
