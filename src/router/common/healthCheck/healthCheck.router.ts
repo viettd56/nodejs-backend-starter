@@ -1,7 +1,7 @@
 import { FastifyPluginCallback } from 'fastify';
 import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import { healthCheckService } from './healthCheck.service';
 import { commonSchema } from 'src/domains/common/common.schema';
+import { healthCheck } from './usecase/health-check.usecase';
 
 export const healthCheckRoutes: FastifyPluginCallback = (app) => {
     app.withTypeProvider<TypeBoxTypeProvider>().get(
@@ -18,7 +18,7 @@ export const healthCheckRoutes: FastifyPluginCallback = (app) => {
             },
         },
         async (req, res) => {
-            const data = healthCheckService.check();
+            const data = healthCheck();
             return data;
         },
     );

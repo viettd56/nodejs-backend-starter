@@ -3,7 +3,7 @@ require('dotenv').config();
 import Fastify from 'fastify';
 import { sampleRoutes } from './domains/_sample/sample.router';
 import { logger } from './helpers/Logger.helper';
-import { healthCheckRoutes } from './domains/healthCheck/healthCheck.router';
+import { healthCheckRoutes } from './router/common/healthCheck/healthCheck.router';
 import { cmsRoutes } from './router/cms/cms.router';
 import { mobileRoutes } from './router/mobile/mobile.router';
 import { serverConfig } from './configs/Server.config';
@@ -43,10 +43,6 @@ const start = async () => {
         // Declare a route
         fastify.register(healthCheckRoutes, {
             prefix: '',
-        });
-
-        fastify.register(sampleRoutes, {
-            prefix: '/v1/sample',
         });
 
         fastify.register(cmsRoutes, {
