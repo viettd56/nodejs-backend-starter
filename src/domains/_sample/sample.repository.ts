@@ -1,41 +1,55 @@
-import _ from "lodash";
-import { SampleEntity } from "./sample.entity";
-import { SampleModel } from "src/models/Sample.model";
-import { Transaction } from "sequelize";
-import { sequelize } from "src/models/sequelize";
-import { Exception } from "src/helpers/Exception.helper";
+import _ from 'lodash';
+import { SampleEntity } from './sample.entity';
+import { SampleModel } from 'src/models/Sample.model';
+import { Transaction } from 'sequelize';
+import { sequelize } from 'src/models/sequelize';
+import { Exception } from 'src/helpers/Exception.helper';
 
 const SampleRepository = () => {
-    const logic = () => {
-        return _.random(-10, 10);
-    };
-
-    const update = async (data: SampleEntity, objectModel: SampleModel, transaction?: Transaction) => {
-        const {id, name} = data.toObject();
-        if (id !== objectModel.id){
-            throw new Exception('Data invalid');
+    const update = async (data: SampleEntity, transaction?: Transaction) => {
+        const { id, name, has_transaction_lock } = data;
+        if (has_transaction_lock === true && !transaction) {
+            throw new Exception('Transaction is required');
         }
-        objectModel.name = name;
-        return objectModel.save({transaction})
+        await SampleModel.update(
+            {
+                name,
+            },
+            {
+                where: {
+                    id,
+                },
+                transaction,
+            },
+        );
+        return true;
     };
 
-    const findById = (id: string) => {
-        return SampleModel.findByPk(id);
+    const findById = async (id: string) => {
+        const data = await SampleModel.findByPk(id);
+        if (!data) {
+            throw new Exception('Sample not found');
+        }
+        return SampleEntity.modelToEntity(data, false);
     };
 
     const findByIdWithLock = async (id: string, transaction: Transaction) => {
-        return SampleModel.findByPk(id, {
+        const data = await SampleModel.findByPk(id, {
             transaction,
-            lock: transaction.LOCK.UPDATE
+            lock: transaction.LOCK.UPDATE,
         });
+
+        if (!data) {
+            throw new Exception('Sample not found');
+        }
+        return SampleEntity.modelToEntity(data, true);
     };
 
     return {
-        logic,
         update,
         findById,
         findByIdWithLock,
-        getTransaction: sequelize.transaction
+        getTransaction: sequelize.transaction,
     };
 };
 

@@ -1,10 +1,11 @@
 import { sampleRepository } from 'src/domains/_sample/sample.repository';
 import { SampleEntity } from './sample.entity';
 import { Exception } from 'src/helpers/Exception.helper';
+import _ from 'lodash';
 
 const SampleService = () => {
     const logic = async () => {
-        const num = sampleRepository.logic();
+        const num = _.random(-10, 10);
         if (num > 0) {
             return true;
         } else if (num < 0) {
@@ -16,16 +17,14 @@ const SampleService = () => {
 
     const clearName = async (id: string) => {
         await sampleRepository.getTransaction(async (transaction) => {
-            const sample = await sampleRepository.findByIdWithLock(id, transaction);
-            if (!sample) {
+            const sampleEntity = await sampleRepository.findByIdWithLock(id, transaction);
+            if (!sampleEntity) {
                 throw new Exception('Sample not found');
             }
-
-            const sampleEntity = SampleEntity.fromObjectModel(sample);
             sampleEntity.clearName();
 
             // Cập nhật trong cùng transaction để giữ lock
-            await sampleRepository.update(sampleEntity, sample, transaction);
+            await sampleRepository.update(sampleEntity, transaction);
         });
     };
 
