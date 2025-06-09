@@ -1,7 +1,7 @@
 import { FastifyPluginCallback } from 'fastify';
 import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import { loginService } from './login.service';
 import { commonSchema } from 'src/domains/_shared/common/common.schema';
+import { loginController } from './login.controller';
 
 export const mobileLoginRoutes: FastifyPluginCallback = (app) => {
     app.withTypeProvider<TypeBoxTypeProvider>().post(
@@ -25,7 +25,7 @@ export const mobileLoginRoutes: FastifyPluginCallback = (app) => {
         },
         async (req, res) => {
             const { id } = req.body;
-            const data = loginService.logic();
+            const data = loginController.login();
             return {
                 status: true,
                 data,
