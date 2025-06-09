@@ -1,6 +1,4 @@
-import { UserModel } from 'src/models/data/User.model';
 import { tokenService } from '../token/token.service';
-import { bcryptHelper } from 'src/helpers/Bcrypt.helper';
 import { Transaction } from 'sequelize';
 import { UserEntity } from './user.entity';
 import { userRepository } from './user.repository';
