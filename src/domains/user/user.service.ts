@@ -2,6 +2,8 @@ import { UserModel } from 'src/models/data/User.model';
 import { tokenService } from '../token/token.service';
 import { bcryptHelper } from 'src/helpers/Bcrypt.helper';
 import { Transaction } from 'sequelize';
+import { UserEntity } from './user.entity';
+import { userRepository } from './user.repository';
 
 const UserService = () => {
     const genToken = ({
@@ -55,19 +57,16 @@ const UserService = () => {
             transaction?: Transaction;
         } = {},
     ) => {
-        const user = await UserModel.create(
-            {
-                name,
-                email,
-                password: await bcryptHelper.hashPassword(password),
-                extra_data: {},
-                username,
-            },
-            {
-                transaction,
-            },
-        );
-        return user;
+        const userEntity = new UserEntity({
+            id: UserEntity.newId(),
+            name,
+            email: email || null,
+            password: await UserEntity.hashPassword(password),
+            extra_data: {},
+            has_transaction_lock: !!transaction,
+            username: username || null,
+        });
+        return userRepository.create(userEntity, transaction);
     };
 
     return { genToken, newUser };

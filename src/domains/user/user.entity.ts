@@ -1,5 +1,11 @@
+import _ from 'lodash';
+import moment from 'moment-timezone';
 import { bcryptHelper } from 'src/helpers/Bcrypt.helper';
 import { UserModel } from 'src/models/data/User.model';
+
+const hashPassword = async (password: string) => {
+    return bcryptHelper.hashPassword(password);
+};
 
 export class UserEntity {
     private id: string;
@@ -8,6 +14,7 @@ export class UserEntity {
     private username: string | null;
     private password: string;
     private has_transaction_lock: boolean;
+    private extra_data: UserModel['extra_data'];
 
     constructor({
         id,
@@ -16,6 +23,7 @@ export class UserEntity {
         password,
         email,
         has_transaction_lock,
+        extra_data,
     }: {
         id: string;
         name: string;
@@ -23,6 +31,7 @@ export class UserEntity {
         password: string;
         email: string | null;
         has_transaction_lock: boolean;
+        extra_data: UserModel['extra_data'];
     }) {
         this.id = id;
         this.name = name;
@@ -30,6 +39,7 @@ export class UserEntity {
         this.password = password;
         this.email = email;
         this.has_transaction_lock = has_transaction_lock;
+        this.extra_data = extra_data;
     }
 
     public toObject() {
@@ -40,6 +50,7 @@ export class UserEntity {
             password: this.password,
             email: this.email,
             has_transaction_lock: this.has_transaction_lock,
+            extra_data: this.extra_data,
         };
     }
 
@@ -51,10 +62,19 @@ export class UserEntity {
             password: obj.password,
             email: obj.email,
             has_transaction_lock,
+            extra_data: obj.extra_data,
         });
     }
 
     public async changePassword(password: string) {
-        this.password = await bcryptHelper.hashPassword(password);
+        this.password = await hashPassword(password);
     }
+
+    public static async hashPassword(password: string) {
+        return hashPassword(password);
+    }
+
+    public static newId = () => {
+        return 'U' + moment().unix().toString() + _.random(10000, 99999);
+    };
 }

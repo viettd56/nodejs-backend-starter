@@ -6,7 +6,7 @@ import { UserEntity } from './user.entity';
 
 const UserRepository = () => {
     const update = async (data: UserEntity, transaction?: Transaction) => {
-        const { id, name, has_transaction_lock, email, password, username } = data.toObject();
+        const { id, name, has_transaction_lock, email, password, username, extra_data } = data.toObject();
         if (has_transaction_lock === true && !transaction) {
             throw new Exception('Transaction is required');
         }
@@ -16,6 +16,7 @@ const UserRepository = () => {
                 email,
                 password,
                 username,
+                extra_data,
             },
             {
                 where: {
@@ -47,10 +48,31 @@ const UserRepository = () => {
         return UserEntity.modelToEntity(data, true);
     };
 
+    const create = async (data: UserEntity, transaction?: Transaction) => {
+        const { id, name, has_transaction_lock, extra_data, email, password, username } = data.toObject();
+        if (has_transaction_lock === true && !transaction) {
+            throw new Exception('Transaction is required');
+        }
+        return await UserModel.create(
+            {
+                id,
+                name,
+                extra_data,
+                email,
+                password,
+                username,
+            },
+            {
+                transaction,
+            },
+        );
+    };
+
     return {
         update,
         findById,
         findByIdWithLock,
+        create,
     };
 };
 

@@ -32,9 +32,6 @@ export class UserModel extends Model<Attributes, CreationAttributes> implements 
     @Column({
         type: DataType.STRING,
         primaryKey: true,
-        defaultValue: () => {
-            return 'U' + moment().unix().toString() + _.random(10000, 99999);
-        },
     })
     declare id: string;
 

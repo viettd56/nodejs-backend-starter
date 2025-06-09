@@ -6,13 +6,14 @@ import { Exception } from 'src/helpers/Exception.helper';
 
 const SampleRepository = () => {
     const update = async (data: SampleEntity, transaction?: Transaction) => {
-        const { id, name, has_transaction_lock } = data.toObject();
+        const { id, name, has_transaction_lock, extra_data } = data.toObject();
         if (has_transaction_lock === true && !transaction) {
             throw new Exception('Transaction is required');
         }
         await SampleModel.update(
             {
                 name,
+                extra_data,
             },
             {
                 where: {
@@ -22,6 +23,23 @@ const SampleRepository = () => {
             },
         );
         return true;
+    };
+
+    const create = async (data: SampleEntity, transaction?: Transaction) => {
+        const { id, name, has_transaction_lock, extra_data } = data.toObject();
+        if (has_transaction_lock === true && !transaction) {
+            throw new Exception('Transaction is required');
+        }
+        return await SampleModel.create(
+            {
+                id,
+                name,
+                extra_data,
+            },
+            {
+                transaction,
+            },
+        );
     };
 
     const findById = async (id: string) => {
@@ -48,6 +66,7 @@ const SampleRepository = () => {
         update,
         findById,
         findByIdWithLock,
+        create,
     };
 };
 
