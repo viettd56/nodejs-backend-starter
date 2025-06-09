@@ -1,4 +1,4 @@
-import { sampleRepository } from 'src/domains/_shared/_sample/sample.repository';
+import { sampleRepository } from 'src/domains/_sample/sample.repository';
 
 const DataService = () => {
     const logic = async () => {

@@ -2,7 +2,7 @@ import { FastifyPluginCallback } from 'fastify';
 import { sampleMiddleware } from './sample.middleware';
 import { Joi, ValidationHelper } from 'src/helpers/Validation.helper';
 import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import { commonSchema } from 'src/domains/_shared/common/common.schema';
+import { commonSchema } from 'src/domains/common/common.schema';
 import { sampleService } from './sample.service';
 export const sampleRoutes: FastifyPluginCallback = (app) => {
     app.addHook('preHandler', sampleMiddleware.auth);

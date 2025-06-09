@@ -1,6 +1,6 @@
 import { FastifyPluginCallback } from 'fastify';
 import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import { commonSchema } from 'src/domains/_shared/common/common.schema';
+import { commonSchema } from 'src/domains/common/common.schema';
 import { loginController } from './login.controller';
 
 export const mobileLoginRoutes: FastifyPluginCallback = (app) => {

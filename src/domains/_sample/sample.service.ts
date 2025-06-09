@@ -1,4 +1,4 @@
-import { sampleRepository } from 'src/domains/_shared/_sample/sample.repository';
+import { sampleRepository } from 'src/domains/_sample/sample.repository';
 import { SampleEntity } from './sample.entity';
 import { Exception } from 'src/helpers/Exception.helper';
 

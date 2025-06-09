@@ -1,5 +1,5 @@
 import { tokenJWTConfig } from 'src/configs/TokenJWT.config';
-import { tokenService } from 'src/domains/_shared/token/token.service';
+import { tokenService } from 'src/domains/token/token.service';
 
 const LoginController = () => {
     const login = () => {

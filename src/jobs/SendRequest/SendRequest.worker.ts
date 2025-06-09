@@ -2,7 +2,7 @@ import { Worker } from 'bullmq';
 import { SendRequestData } from '../types';
 import { sendRequestQueue } from './SendRequest.queue';
 import axios from 'axios';
-import { jobQueueConfig } from 'src/domains/_shared/jobQueue/JobQueue.config';
+import { jobQueueConfig } from 'src/domains/jobQueue/JobQueue.config';
 
 export const SendRequestWorker = () => {
     const { workerOpts, failedHandler } = jobQueueConfig;

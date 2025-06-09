@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 require('dotenv').config();
 import Fastify from 'fastify';
-import { sampleRoutes } from './domains/_shared/_sample/sample.router';
+import { sampleRoutes } from './domains/_sample/sample.router';
 import { logger } from './helpers/Logger.helper';
-import { healthCheckRoutes } from './domains/_shared/healthCheck/healthCheck.router';
+import { healthCheckRoutes } from './domains/healthCheck/healthCheck.router';
 import { cmsRoutes } from './router/cms/cms.router';
 import { mobileRoutes } from './router/mobile/mobile.router';
 import { serverConfig } from './configs/Server.config';
-import { swaggerService } from './domains/_shared/swagger/swagger.service';
-import { fastifyService } from './domains/_shared/fastify/fastify.service';
+import { swaggerService } from './domains/swagger/swagger.service';
+import { fastifyService } from './domains/fastify/fastify.service';
 
 // Override console.log
 console.log = (...args) => {
