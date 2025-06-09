@@ -1,26 +1,22 @@
 import { SampleModel } from 'src/models/Sample.model';
 
 export class SampleEntity {
-    private _id: string;
-    private _name: string;
-    private _has_transaction_lock: boolean;
+    private id: string;
+    private name: string;
+    private has_transaction_lock: boolean;
 
     constructor({ id, name, has_transaction_lock }: { id: string; name: string; has_transaction_lock: boolean }) {
-        this._id = id;
-        this._name = name;
-        this._has_transaction_lock = has_transaction_lock;
+        this.id = id;
+        this.name = name;
+        this.has_transaction_lock = has_transaction_lock;
     }
 
-    public get id() {
-        return this._id;
-    }
-
-    public get name() {
-        return this._name;
-    }
-
-    public get has_transaction_lock() {
-        return this._has_transaction_lock;
+    public toObject() {
+        return {
+            id: this.id,
+            name: this.name,
+            has_transaction_lock: this.has_transaction_lock,
+        };
     }
 
     public static modelToEntity(obj: SampleModel, has_transaction_lock: boolean) {
@@ -28,6 +24,6 @@ export class SampleEntity {
     }
 
     public clearName() {
-        this._name = '';
+        this.name = '';
     }
 }

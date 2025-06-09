@@ -6,7 +6,7 @@ import { UserEntity } from './user.entity';
 
 const UserRepository = () => {
     const update = async (data: UserEntity, transaction?: Transaction) => {
-        const { id, name, has_transaction_lock, email, password, username } = data;
+        const { id, name, has_transaction_lock, email, password, username } = data.toObject();
         if (has_transaction_lock === true && !transaction) {
             throw new Exception('Transaction is required');
         }

@@ -2,12 +2,12 @@ import { bcryptHelper } from 'src/helpers/Bcrypt.helper';
 import { UserModel } from 'src/models/data/User.model';
 
 export class UserEntity {
-    private _id: string;
-    private _email: string | null;
-    private _name: string;
-    private _username: string | null;
-    private _password: string;
-    private _has_transaction_lock: boolean;
+    private id: string;
+    private email: string | null;
+    private name: string;
+    private username: string | null;
+    private password: string;
+    private has_transaction_lock: boolean;
 
     constructor({
         id,
@@ -24,36 +24,23 @@ export class UserEntity {
         email: string | null;
         has_transaction_lock: boolean;
     }) {
-        this._id = id;
-        this._name = name;
-        this._username = username;
-        this._password = password;
-        this._email = email;
-        this._has_transaction_lock = has_transaction_lock;
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.has_transaction_lock = has_transaction_lock;
     }
 
-    public get id() {
-        return this._id;
-    }
-
-    public get name() {
-        return this._name;
-    }
-
-    public get email() {
-        return this._email;
-    }
-
-    public get username() {
-        return this._username;
-    }
-
-    public get password() {
-        return this._password;
-    }
-
-    public get has_transaction_lock() {
-        return this._has_transaction_lock;
+    public toObject() {
+        return {
+            id: this.id,
+            name: this.name,
+            username: this.username,
+            password: this.password,
+            email: this.email,
+            has_transaction_lock: this.has_transaction_lock,
+        };
     }
 
     public static modelToEntity(obj: UserModel, has_transaction_lock: boolean) {
@@ -68,6 +55,6 @@ export class UserEntity {
     }
 
     public async changePassword(password: string) {
-        this._password = await bcryptHelper.hashPassword(password);
+        this.password = await bcryptHelper.hashPassword(password);
     }
 }

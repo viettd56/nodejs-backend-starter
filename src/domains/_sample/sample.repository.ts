@@ -6,7 +6,7 @@ import { Exception } from 'src/helpers/Exception.helper';
 
 const SampleRepository = () => {
     const update = async (data: SampleEntity, transaction?: Transaction) => {
-        const { id, name, has_transaction_lock } = data;
+        const { id, name, has_transaction_lock } = data.toObject();
         if (has_transaction_lock === true && !transaction) {
             throw new Exception('Transaction is required');
         }
