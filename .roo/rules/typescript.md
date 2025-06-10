@@ -12,6 +12,7 @@ Generate code, corrections, and refactorings that comply with the basic principl
     - Create necessary types.
 - Don't leave blank lines within a function.
 - One export per file.
+- Use yarn
 
 ### Functions
 

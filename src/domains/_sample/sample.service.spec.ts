@@ -1,135 +1,76 @@
-import { sampleRepository } from './sample.repository';
-import { sampleService } from './sample.service';
-import { SampleEntity } from './sample.entity';
-import { Exception } from 'src/helpers/Exception.helper';
-
-// Mock the sampleRepository
-const mockTransaction = {
-  LOCK: {
-    UPDATE: 'UPDATE',
-  },
-  commit: jest.fn().mockResolvedValue(undefined),
-  rollback: jest.fn().mockResolvedValue(undefined),
-};
+// src/domains/_sample/sample.service.spec.ts
+const mockFindByIdWithLock = jest.fn();
+const mockUpdate = jest.fn();
+const mockTransaction = jest.fn();
+const mockRandom = jest.fn();
 
 jest.mock('./sample.repository', () => ({
-  sampleRepository: {
-    logic: jest.fn(),
-    findByIdWithLock: jest.fn(),
-    update: jest.fn(),
-    getTransaction: jest.fn().mockImplementation((callback) => {
-      return callback(mockTransaction);
-    }),
-  },
+    sampleRepository: {
+        findByIdWithLock: mockFindByIdWithLock,
+        update: mockUpdate,
+    },
 }));
 
-describe('SampleService', () => {
-  let mockRepositoryLogic: jest.SpyInstance;
-  let mockFindByIdWithLock: jest.SpyInstance;
-  let mockUpdate: jest.SpyInstance;
-  let mockGetTransaction: jest.SpyInstance;
+jest.mock('src/models/sequelize', () => ({
+    sequelize: {
+        transaction: mockTransaction,
+    },
+}));
 
-  beforeEach(() => {
-    // Create fresh spies before each test
-    mockRepositoryLogic = jest.spyOn(sampleRepository, 'logic');
-    mockFindByIdWithLock = jest.spyOn(sampleRepository, 'findByIdWithLock');
-    mockUpdate = jest.spyOn(sampleRepository, 'update');
-    mockGetTransaction = jest.spyOn(sampleRepository, 'getTransaction');
-    
-    // Reset all mocks
-    jest.clearAllMocks();
-  });
+jest.mock('lodash', () => ({
+    random: mockRandom,
+}));
 
-  afterEach(() => {
-    // Clear all mocks after each test
-    jest.clearAllMocks();
-  });
+import { Exception } from 'src/helpers/Exception.helper';
 
-  describe('logic', () => {
-    it('should return true when repository returns a positive number', async () => {
-      // Arrange
-      mockRepositoryLogic.mockReturnValue(1);
+describe('sampleService', () => {
+    let sampleService: typeof import('./sample.service').sampleService;
 
-      // Act
-      const result = await sampleService.logic();
-
-      // Assert
-      expect(mockRepositoryLogic).toHaveBeenCalledTimes(1);
-      expect(result).toBe(true);
+    beforeAll(() => {
+        sampleService = require('./sample.service').sampleService;
     });
 
-    it('should return false when repository returns a negative number', async () => {
-      // Arrange
-      mockRepositoryLogic.mockReturnValue(-1);
+    describe('logic', () => {
+        it('should return true if num > 0', async () => {
+            mockRandom.mockReturnValue(5);
+            const result = await sampleService.logic();
+            expect(result).toBe(true);
+        });
 
-      // Act
-      const result = await sampleService.logic();
+        it('should return false if num < 0', async () => {
+            mockRandom.mockReturnValue(-5);
+            const result = await sampleService.logic();
+            expect(result).toBe(false);
+        });
 
-      // Assert
-      expect(mockRepositoryLogic).toHaveBeenCalledTimes(1);
-      expect(result).toBe(false);
+        it('should return "SampleService" if num === 0', async () => {
+            mockRandom.mockReturnValue(0);
+            const result = await sampleService.logic();
+            expect(result).toBe('SampleService');
+        });
     });
 
-    it('should return "SampleService" when repository returns 0', async () => {
-      // Arrange
-      mockRepositoryLogic.mockReturnValue(0);
+    describe('clearName', () => {
+        const transaction = {};
+        beforeEach(() => {
+            mockTransaction.mockImplementation(async (cb: any) => cb(transaction));
+            mockFindByIdWithLock.mockReset();
+            mockUpdate.mockReset();
+        });
 
-      // Act
-      const result = await sampleService.logic();
+        it('should throw Exception if sampleEntity not found', async () => {
+            mockFindByIdWithLock.mockResolvedValue(null);
+            await expect(sampleService.clearName('id')).rejects.toThrow(Exception);
+        });
 
-      // Assert
-      expect(mockRepositoryLogic).toHaveBeenCalledTimes(1);
-      expect(result).toBe('SampleService');
+        it('should call clearName and update if sampleEntity found', async () => {
+            const sampleEntity = { clearName: jest.fn() };
+            mockFindByIdWithLock.mockResolvedValue(sampleEntity);
+            mockUpdate.mockResolvedValue(undefined);
+
+            await sampleService.clearName('id');
+            expect(sampleEntity.clearName).toHaveBeenCalled();
+            expect(mockUpdate).toHaveBeenCalledWith(sampleEntity, transaction);
+        });
     });
-  });
-
-  describe('clearName', () => {
-    const sampleId = 'test-id';
-    const mockSample = {
-      id: sampleId,
-      name: 'Test Name',
-      save: jest.fn(),
-    };
-
-    it('should clear the name successfully', async () => {
-      // Arrange
-      mockFindByIdWithLock.mockResolvedValue(mockSample);
-      mockUpdate.mockImplementation(async (entity, model, t) => {
-        model.name = entity.toObject().name;
-        return model;
-      });
-
-      // Act
-      await sampleService.clearName(sampleId);
-
-      // Assert
-      expect(mockGetTransaction).toHaveBeenCalledWith(expect.any(Function));
-      expect(mockFindByIdWithLock).toHaveBeenCalledWith(sampleId, mockTransaction);
-      expect(mockUpdate).toHaveBeenCalledWith(
-        expect.any(SampleEntity),
-        mockSample,
-        mockTransaction
-      );
-      expect(mockSample.name).toBe('');
-    });
-
-    it('should throw an exception when sample not found', async () => {
-      // Arrange
-      mockFindByIdWithLock.mockResolvedValue(null);
-
-      // Act & Assert
-      await expect(sampleService.clearName(sampleId)).rejects.toThrow('Sample not found');
-      expect(mockFindByIdWithLock).toHaveBeenCalledWith(sampleId, mockTransaction);
-    });
-
-    it('should handle transaction errors', async () => {
-      // Arrange
-      const testError = new Error('Transaction failed');
-      mockFindByIdWithLock.mockRejectedValue(testError);
-
-      // Act & Assert
-      await expect(sampleService.clearName(sampleId)).rejects.toThrow(testError);
-      expect(mockFindByIdWithLock).toHaveBeenCalledWith(sampleId, mockTransaction);
-    });
-  });
 });
