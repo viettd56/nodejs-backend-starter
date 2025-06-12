@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 
 /**
  * Service for signing and verifying JWT tokens with caching.

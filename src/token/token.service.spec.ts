@@ -3,8 +3,8 @@
 require('dotenv').config();
 import { TokenService, Payload } from './token.service';
 import { ConfigsService } from '../configs/configs.service';
-import * as jwt from 'jsonwebtoken';
-import * as NodeCache from 'node-cache';
+import jwt from 'jsonwebtoken';
+import NodeCache from 'node-cache';
 
 jest.mock('jsonwebtoken');
 jest.mock('node-cache');
