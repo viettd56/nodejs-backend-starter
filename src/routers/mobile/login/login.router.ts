@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { FastifyPluginCallback } from 'fastify';
 import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
-import { commonSchema } from 'src/common/common.schema';
 import { MobileLoginUsecase } from './usecase/login.usecase';
+import { commonSchema } from 'src/shared/common/common.schema';
 
 /**
  * Mobile Login Router provider for NestJS.

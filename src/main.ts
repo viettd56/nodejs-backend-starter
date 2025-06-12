@@ -2,7 +2,7 @@ require('dotenv').config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AppService } from './app.service';
-import { overrideConsoleLog } from './helpers/Logger.helper';
+import { overrideConsoleLog } from './shared/helpers/Logger.helper';
 
 overrideConsoleLog();
 async function bootstrap() {

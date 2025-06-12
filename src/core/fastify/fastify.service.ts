@@ -3,7 +3,7 @@ import Fastify, { FastifyInstance } from 'fastify';
 import { ConfigsService } from 'src/configs/configs.service';
 import { RoutersService } from 'src/routers/routers.service';
 import { FastifyPluginService } from './fastifyPlugin.service';
-import { SwaggerService } from 'src/swagger/swagger.service';
+import { SwaggerService } from '../swagger/swagger.service';
 
 @Injectable()
 export class FastifyService {
@@ -33,18 +33,7 @@ export class FastifyService {
                 console.log(`API Documentation available at http://localhost:3000/documentation`);
             }
 
-            // Declare a route
-            this.fastify.register(this.routersService.commonRoutes, {
-                prefix: '',
-            });
-
-            this.fastify.register(this.routersService.cmsRoutes, {
-                prefix: '/v1/cms',
-            });
-
-            this.fastify.register(this.routersService.mobileRoutes, {
-                prefix: '/v1/mobile',
-            });
+            this.routersService.registerRoutes(this.fastify);
 
             await this.fastify.listen({ port: 3000 });
             console.log(`Server listening at 3000`);

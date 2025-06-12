@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Joi, ValidationHelper } from '../helpers/Validation.helper';
+import { Joi, ValidationHelper } from 'src/shared/helpers/Validation.helper';
 
 type IConfigs = {
     REDIS_CACHE_HOST: string;

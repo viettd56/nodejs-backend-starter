@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Joi, ValidationHelper } from 'src/helpers/Validation.helper';
+import { Joi, ValidationHelper } from 'src/shared/helpers/Validation.helper';
 
 type IConfigs = {
     AUTH_KEY: string;

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Transaction } from 'sequelize';
-import { Exception } from 'src/helpers/Exception.helper';
 import { DatabaseService } from 'src/database/database.service';
 import { UserEntity } from './user.entity';
+import { Exception } from 'src/shared/helpers/Exception.helper';
 
 @Injectable()
 export class UserRepository {

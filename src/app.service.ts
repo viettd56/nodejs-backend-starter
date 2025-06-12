@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { FastifyService } from './fastify/fastify.service';
 import { DatabaseService } from './database/database.service';
+import { FastifyService } from './core/fastify/fastify.service';
 
 @Injectable()
 export class AppService {

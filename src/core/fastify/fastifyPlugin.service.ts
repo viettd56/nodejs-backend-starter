@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { FastifyInstance } from 'fastify';
 import { nanoid } from 'nanoid';
-import { Exception } from 'src/helpers/Exception.helper';
 import helmet from '@fastify/helmet';
 import { ConfigsService } from 'src/configs/configs.service';
+import { Exception } from 'src/shared/helpers/Exception.helper';
 
 @Injectable()
 export class FastifyPluginService {
@@ -49,7 +49,7 @@ export class FastifyPluginService {
                     '🚀 ~ FastifyPluginService ~ validate ~ this.configsService.serverConfig.AUTH_KEY:',
                     authKey,
                 );
-                throw new Error('FST_BASIC_AUTH_MISSING_OR_BAD_AUTHORIZATION_HEADER');
+                done(new Error('FST_BASIC_AUTH_MISSING_OR_BAD_AUTHORIZATION_HEADER'));
             } else {
                 done();
             }

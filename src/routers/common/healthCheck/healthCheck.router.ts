@@ -1,8 +1,8 @@
 import { Type, TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { Injectable } from '@nestjs/common';
 import { FastifyPluginCallback } from 'fastify';
-import { commonSchema } from 'src/common/common.schema';
 import { HealthCheckUsecase } from './usecase/health-check.usecase';
+import { commonSchema } from 'src/shared/common/common.schema';
 
 /**
  * Service for signing and verifying JWT tokens with caching.

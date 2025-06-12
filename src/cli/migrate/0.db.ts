@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'src/app.module';
 import { DatabaseModule } from 'src/database/database.module';
 import { DatabaseService } from 'src/database/database.service';
-import { overrideConsoleLog } from 'src/helpers/Logger.helper';
+import { overrideConsoleLog } from 'src/shared/helpers/Logger.helper';
 import { SequelizeStorage, Umzug } from 'umzug';
 
 const prefix = 'API-';
