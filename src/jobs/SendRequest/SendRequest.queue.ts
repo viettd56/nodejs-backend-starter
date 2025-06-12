@@ -1,27 +1,27 @@
+import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
 import { SendRequestData } from '../types';
-import { jobQueueConfig } from 'src/domains/_shared/jobQueue/JobQueue.config';
+import { JobQueueConfigService } from '../JobQueue.config';
 
-const QUEUE_NAME = 'send_request';
+/**
+ * Injectable service for managing the SendRequest queue.
+ */
+@Injectable()
+export class SendRequestQueueService {
+    public readonly queue: Queue<SendRequestData>;
 
-const SendRequestQueue = () => {
-    const { queueOpts } = jobQueueConfig;
-
-    const queue = new Queue<SendRequestData>(QUEUE_NAME, {
-        ...queueOpts,
-        defaultJobOptions: {
-            ...queueOpts.defaultJobOptions,
-            attempts: 15,
-            backoff: {
-                type: 'exponential',
-                delay: 5000,
+    constructor(private readonly jobQueueConfig: JobQueueConfigService) {
+        const { queueOpts } = this.jobQueueConfig;
+        this.queue = new Queue<SendRequestData>('send_request', {
+            ...queueOpts,
+            defaultJobOptions: {
+                ...queueOpts.defaultJobOptions,
+                attempts: 15,
+                backoff: {
+                    type: 'exponential',
+                    delay: 5000,
+                },
             },
-        },
-    });
-
-    return {
-        queue,
-    };
-};
-
-export const sendRequestQueue = SendRequestQueue();
+        });
+    }
+}
