@@ -1,10 +1,10 @@
 // src/token/token.service.spec.ts
 
 require('dotenv').config();
-import { TokenService, Payload } from './token.service';
-import { ConfigsService } from '../configs/configs.service';
 import jwt from 'jsonwebtoken';
 import NodeCache from 'node-cache';
+import { ConfigsService } from 'src/configs/configs.service';
+import { TokenService, Payload } from '../token.service';
 
 jest.mock('jsonwebtoken');
 jest.mock('node-cache');
