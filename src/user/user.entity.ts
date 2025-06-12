@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import moment from 'moment-timezone';
+import * as _ from 'lodash';
+import * as moment from 'moment-timezone';
 import { UserModel } from 'src/database/data/User.model';
 import { bcryptHelper } from 'src/shared/helpers/Bcrypt.helper';
 
