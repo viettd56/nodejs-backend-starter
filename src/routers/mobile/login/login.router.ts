@@ -13,7 +13,7 @@ export class MobileLoginRouter {
 
     public mobileLoginRoutes: FastifyPluginCallback = (app) => {
         app.withTypeProvider<TypeBoxTypeProvider>().post(
-            '/',
+            '',
             {
                 schema: {
                     body: Type.Object({
