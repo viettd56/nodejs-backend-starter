@@ -99,6 +99,7 @@
         "moduleNameMapper": {
             "^src/(.*)$": "<rootDir>/$1"
         },
-        "testEnvironment": "node"
+        "testEnvironment": "node",
+        "cache": true
     }
 }
