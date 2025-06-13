@@ -61,15 +61,19 @@ export class UserService {
             transaction?: Transaction;
         } = {},
     ) => {
-        const userEntity = new UserEntity({
-            id: UserEntity.newId(),
-            name,
-            email: email || null,
-            password: await UserEntity.hashPassword(password),
-            extra_data: {},
-            has_transaction_lock: !!transaction,
-            username: username || null,
-        });
+        const userEntity = new UserEntity(
+            {
+                id: UserEntity.newId(),
+                name,
+                email: email || null,
+                password: await UserEntity.hashPassword(password),
+                extra_data: {},
+                username: username || null,
+            },
+            {
+                has_transaction_lock: !!transaction,
+            },
+        );
         return this.userRepository.create(userEntity, transaction);
     };
 }

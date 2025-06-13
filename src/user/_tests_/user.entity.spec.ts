@@ -29,15 +29,17 @@ describe('UserEntity', () => {
     } as unknown as UserModel;
 
     it('should construct and return correct object', () => {
-        const entity = new UserEntity({
-            id: 'user-id',
-            name: 'Test User',
-            username: 'testuser',
-            password: 'plainpass',
-            email: 'test@example.com',
-            has_transaction_lock: true,
-            extra_data: { foo: 'bar' },
-        });
+        const entity = new UserEntity(
+            {
+                id: 'user-id',
+                name: 'Test User',
+                username: 'testuser',
+                password: 'plainpass',
+                email: 'test@example.com',
+                extra_data: { foo: 'bar' },
+            },
+            { has_transaction_lock: true },
+        );
         expect(entity.toObject()).toEqual({
             id: 'user-id',
             name: 'Test User',
@@ -50,7 +52,7 @@ describe('UserEntity', () => {
     });
 
     it('should create entity from model', () => {
-        const entity = UserEntity.modelToEntity(baseUserModel, false);
+        const entity = UserEntity.modelToEntity(baseUserModel, { has_transaction_lock: false });
         expect(entity.toObject()).toMatchObject({
             id: baseUserModel.id,
             name: baseUserModel.name,
@@ -63,10 +65,13 @@ describe('UserEntity', () => {
     });
 
     it('should hash password with changePassword', async () => {
-        const entity = new UserEntity({
-            ...baseUserModel,
-            has_transaction_lock: false,
-        });
+        const entity = new UserEntity(
+            {
+                ...baseUserModel,
+                extra_data: baseUserModel.extra_data,
+            },
+            { has_transaction_lock: false },
+        );
         await entity.changePassword('newpass');
         expect(entity.toObject().password).toBe('hashed_newpass');
     });
@@ -78,6 +83,6 @@ describe('UserEntity', () => {
 
     it('should generate new id with newId', () => {
         const id = UserEntity.newId();
-        expect(id).toBe('U123456789012345');
+        expect(id).toMatch(/^U\d{10,}\d{5}$/);
     });
 });

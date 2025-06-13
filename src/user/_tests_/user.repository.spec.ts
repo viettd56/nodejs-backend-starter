@@ -85,7 +85,7 @@ describe('UserRepository', () => {
 
             const result = await userRepository.findById('1');
             expect(databaseService.userModel.findByPk).toHaveBeenCalledWith('1');
-            expect(modelToEntitySpy).toHaveBeenCalledWith(mockModel, false);
+            expect(modelToEntitySpy).toHaveBeenCalledWith(mockModel, { has_transaction_lock: false });
             expect(result).toBe('entity');
         });
 
@@ -106,7 +106,7 @@ describe('UserRepository', () => {
                 transaction: mockTransaction,
                 lock: mockTransaction.LOCK.UPDATE,
             });
-            expect(modelToEntitySpy).toHaveBeenCalledWith(mockModel, true);
+            expect(modelToEntitySpy).toHaveBeenCalledWith(mockModel, { has_transaction_lock: true });
             expect(result).toBe('entity');
         });
 

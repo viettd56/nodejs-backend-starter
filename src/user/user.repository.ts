@@ -35,7 +35,9 @@ export class UserRepository {
         if (!data) {
             throw new Exception('User not found');
         }
-        return UserEntity.modelToEntity(data, false);
+        return UserEntity.modelToEntity(data, {
+            has_transaction_lock: false,
+        });
     };
 
     public findByIdWithLock = async (id: string, transaction: Transaction) => {
@@ -47,7 +49,9 @@ export class UserRepository {
         if (!data) {
             throw new Exception('User not found');
         }
-        return UserEntity.modelToEntity(data, true);
+        return UserEntity.modelToEntity(data, {
+            has_transaction_lock: true,
+        });
     };
 
     public create = async (data: UserEntity, transaction?: Transaction) => {
