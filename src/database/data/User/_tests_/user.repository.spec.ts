@@ -1,30 +1,18 @@
 // src/user/user.repository.spec.ts
 
 import { UserRepository } from '../user.repository';
-import { DatabaseService } from 'src/database/database.service';
+import { UserModel } from '../user.model';
 import { UserEntity } from '../user.entity';
 import { Exception } from 'src/shared/helpers/Exception.helper';
 
 describe('UserRepository', () => {
     let userRepository: UserRepository;
-    let databaseService: jest.Mocked<DatabaseService>;
     let mockTransaction: any;
 
     beforeEach(() => {
-        databaseService = {
-            userModel: {
-                update: jest.fn(),
-                findByPk: jest.fn(),
-                create: jest.fn(),
-            } as {
-                update: jest.Mock;
-                findByPk: jest.Mock;
-                create: jest.Mock;
-            },
-        } as any;
-
-        userRepository = new UserRepository(databaseService);
+        userRepository = new UserRepository();
         mockTransaction = { LOCK: { UPDATE: 'UPDATE' } };
+        jest.clearAllMocks();
     });
 
     describe('update', () => {
@@ -41,10 +29,10 @@ describe('UserRepository', () => {
                 }),
             } as any;
 
-            (databaseService.userModel.update as jest.Mock).mockResolvedValue([1]);
+            jest.spyOn(UserModel, 'update').mockResolvedValue([1] as any);
 
             const result = await userRepository.update(userEntity);
-            expect(databaseService.userModel.update).toHaveBeenCalledWith(
+            expect(UserModel.update).toHaveBeenCalledWith(
                 {
                     name: 'Test',
                     email: 'test@example.com',
@@ -80,17 +68,17 @@ describe('UserRepository', () => {
     describe('findById', () => {
         it('should return UserEntity if found', async () => {
             const mockModel = {};
-            (databaseService.userModel.findByPk as jest.Mock).mockResolvedValue(mockModel);
+            jest.spyOn(UserModel, 'findByPk').mockResolvedValue(mockModel as any);
             const modelToEntitySpy = jest.spyOn(UserEntity, 'modelToEntity').mockReturnValue('entity' as any);
 
             const result = await userRepository.findById('1');
-            expect(databaseService.userModel.findByPk).toHaveBeenCalledWith('1');
+            expect(UserModel.findByPk).toHaveBeenCalledWith('1');
             expect(modelToEntitySpy).toHaveBeenCalledWith(mockModel, { has_transaction_lock: false });
             expect(result).toBe('entity');
         });
 
         it('should throw if user not found', async () => {
-            (databaseService.userModel.findByPk as jest.Mock).mockResolvedValue(null);
+            jest.spyOn(UserModel, 'findByPk').mockResolvedValue(null as any);
             await expect(userRepository.findById('1')).rejects.toThrow(Exception);
         });
     });
@@ -98,11 +86,11 @@ describe('UserRepository', () => {
     describe('findByIdWithLock', () => {
         it('should return UserEntity with lock if found', async () => {
             const mockModel = {};
-            (databaseService.userModel.findByPk as jest.Mock).mockResolvedValue(mockModel);
+            jest.spyOn(UserModel, 'findByPk').mockResolvedValue(mockModel as any);
             const modelToEntitySpy = jest.spyOn(UserEntity, 'modelToEntity').mockReturnValue('entity' as any);
 
             const result = await userRepository.findByIdWithLock('1', mockTransaction);
-            expect(databaseService.userModel.findByPk).toHaveBeenCalledWith('1', {
+            expect(UserModel.findByPk).toHaveBeenCalledWith('1', {
                 transaction: mockTransaction,
                 lock: mockTransaction.LOCK.UPDATE,
             });
@@ -111,7 +99,7 @@ describe('UserRepository', () => {
         });
 
         it('should throw if user not found', async () => {
-            (databaseService.userModel.findByPk as jest.Mock).mockResolvedValue(null);
+            jest.spyOn(UserModel, 'findByPk').mockResolvedValue(null as any);
             await expect(userRepository.findByIdWithLock('1', mockTransaction)).rejects.toThrow(Exception);
         });
     });
@@ -131,10 +119,10 @@ describe('UserRepository', () => {
             } as any;
 
             const mockResult = { id: '1' };
-            (databaseService.userModel.create as jest.Mock).mockResolvedValue(mockResult);
+            jest.spyOn(UserModel, 'create').mockResolvedValue(mockResult as any);
 
             const result = await userRepository.create(userEntity);
-            expect(databaseService.userModel.create).toHaveBeenCalledWith(
+            expect(UserModel.create).toHaveBeenCalledWith(
                 {
                     id: '1',
                     name: 'Test',

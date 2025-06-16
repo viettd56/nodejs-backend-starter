@@ -3,16 +3,17 @@ import { Transaction } from 'sequelize';
 import { DatabaseService } from 'src/database/database.service';
 import { UserEntity } from './user.entity';
 import { Exception } from 'src/shared/helpers/Exception.helper';
+import { UserModel } from './user.model';
 
 @Injectable()
 export class UserRepository {
-    constructor(private readonly databaseService: DatabaseService) {}
+    constructor() {}
     public update = async (data: UserEntity, transaction?: Transaction) => {
         const { id, name, has_transaction_lock, email, password, username, extra_data } = data.toObject();
         if (has_transaction_lock === true && !transaction) {
             throw new Exception('Transaction is required');
         }
-        await this.databaseService.userModel.update(
+        await UserModel.update(
             {
                 name,
                 email,
@@ -31,7 +32,7 @@ export class UserRepository {
     };
 
     public findById = async (id: string) => {
-        const data = await this.databaseService.userModel.findByPk(id);
+        const data = await UserModel.findByPk(id);
         if (!data) {
             throw new Exception('User not found');
         }
@@ -41,7 +42,7 @@ export class UserRepository {
     };
 
     public findByIdWithLock = async (id: string, transaction: Transaction) => {
-        const data = await this.databaseService.userModel.findByPk(id, {
+        const data = await UserModel.findByPk(id, {
             transaction,
             lock: transaction.LOCK.UPDATE,
         });
@@ -59,7 +60,7 @@ export class UserRepository {
         if (has_transaction_lock === true && !transaction) {
             throw new Exception('Transaction is required');
         }
-        return await this.databaseService.userModel.create(
+        return await UserModel.create(
             {
                 id,
                 name,

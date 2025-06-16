@@ -8,7 +8,6 @@ import { Sequelize } from 'sequelize-typescript';
 @Injectable()
 export class DatabaseService {
     private _sequelize: Sequelize;
-    private _userModel: typeof UserModel;
     constructor(private readonly configsService: ConfigsService) {
         const models = [UserModel];
         const dbWriteParse = parse(this.configsService.databaseConfig.DATABASE_URL, {});
@@ -65,14 +64,9 @@ export class DatabaseService {
                 max: Infinity,
             },
         });
-        this._userModel = UserModel;
     }
 
     public get sequelize(): Sequelize {
         return this._sequelize;
-    }
-
-    public get userModel(): typeof UserModel {
-        return this._userModel;
     }
 }
