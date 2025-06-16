@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment-timezone';
-import { UserModel } from 'src/database/data/User.model';
 import { bcryptHelper } from 'src/shared/helpers/Bcrypt.helper';
+import { UserModel } from './user.model';
 
 const hashPassword = async (password: string) => {
     return bcryptHelper.hashPassword(password);

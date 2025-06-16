@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Transaction } from 'sequelize';
-import { UserEntity } from './user.entity';
 import { TokenService } from 'src/token/token.service';
-import { UserRepository } from './user.repository';
+import { UserRepository } from 'src/database/data/User/user.repository';
+import { UserEntity } from 'src/database/data/User/user.entity';
 
 @Injectable()
 export class UserService {

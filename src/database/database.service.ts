@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigsService } from 'src/configs/configs.service';
 
 import { parse } from 'pg-connection-string';
-import { UserModel } from './data/User.model';
+import { UserModel } from './data/User/user.model';
 import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
