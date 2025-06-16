@@ -19,6 +19,7 @@
 - The Model is only used by the Repository for database operations.
 - The Entity is the only place for business logic and validation.
 - The Repository is responsible for all database access and must return Entities, not raw Models.
+- **Variable and column names in both Entity classes and Model classes must use snake_case.**
 
 #### Controllers
 
