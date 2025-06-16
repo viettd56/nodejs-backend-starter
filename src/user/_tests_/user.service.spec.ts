@@ -1,10 +1,10 @@
 // src/user/_tests_/user.service.spec.ts
 import { UserService } from '../user.service';
 import { TokenService } from '../../token/token.service';
-import { UserRepository } from '../user.repository';
-import { UserEntity } from '../user.entity';
+import { UserRepository } from 'src/database/data/User/user.repository';
+import { UserEntity } from 'src/database/data/User/user.entity';
 
-jest.mock('../user.entity');
+jest.mock('src/database/data/User/user.entity');
 
 describe('UserService', () => {
     let userService: UserService;

@@ -1,7 +1,7 @@
 // src/user/_tests_/user.entity.spec.ts
 
 import { UserEntity } from '../user.entity';
-import { UserModel } from 'src/database/data/User.model';
+import { UserModel } from '../user.model';
 
 jest.mock('src/shared/helpers/Bcrypt.helper', () => ({
     bcryptHelper: {
