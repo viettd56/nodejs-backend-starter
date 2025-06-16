@@ -1,41 +1,48 @@
+import { Injectable } from '@nestjs/common';
 import { Worker } from 'bullmq';
 import { SendRequestData } from '../types';
-import { sendRequestQueue } from './SendRequest.queue';
+import { SendRequestQueueService } from './SendRequest.queue';
 import axios from 'axios';
-import { jobQueueConfig } from 'src/domains/_shared/jobQueue/JobQueue.config';
+import { JobQueueConfigService } from '../JobQueue.config';
 
-export const SendRequestWorker = () => {
-    const { workerOpts, failedHandler } = jobQueueConfig;
+/**
+ * Injectable service for managing the SendRequest worker.
+ */
+@Injectable()
+export class SendRequestWorkerService {
+    public readonly worker: Worker<SendRequestData>;
 
-    const worker = new Worker<SendRequestData>(
-        sendRequestQueue.queue.name,
-        async (job) => {
-            // console.log('🚀 ~ worker ~ job.data:', job.data);
-            const { method, url, body, headers, params } = job.data;
-            const response = await axios({
-                method,
-                url,
-                params,
-                headers,
-                data: body,
-                timeout: 5000,
-            });
-        },
-        {
-            ...workerOpts,
-            concurrency: 10,
-            lockDuration: 7000,
-        },
-    );
+    constructor(
+        private readonly sendRequestQueueService: SendRequestQueueService,
+        private readonly jobQueueConfigService: JobQueueConfigService,
+    ) {
+        const { workerOpts, failedHandler } = this.jobQueueConfigService;
 
-    worker.on('error', (err) => {
-        // log the error
-        console.error(err);
-    });
+        this.worker = new Worker<SendRequestData>(
+            this.sendRequestQueueService.queue.name,
+            async (job) => {
+                const { method, url, body, headers, params } = job.data;
+                await axios({
+                    method,
+                    url,
+                    params,
+                    headers,
+                    data: body,
+                    timeout: 5000,
+                });
+            },
+            {
+                ...workerOpts,
+                concurrency: 10,
+                lockDuration: 7000,
+            },
+        );
 
-    worker.on('failed', failedHandler);
+        this.worker.on('error', (err) => {
+            // eslint-disable-next-line no-console
+            console.error(err);
+        });
 
-    return {
-        worker,
-    };
-};
+        this.worker.on('failed', failedHandler);
+    }
+}
