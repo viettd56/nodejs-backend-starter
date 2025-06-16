@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
-import * as Joi from 'joi';
+import Joi from 'joi';
 import { Exception } from './Exception.helper';
 export class ValidationHelper<T> {
     private input: T;

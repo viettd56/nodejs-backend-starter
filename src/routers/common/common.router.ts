@@ -11,7 +11,7 @@ export class CommonRouter {
 
     public commonRoutes: FastifyPluginCallback = (app) => {
         app.register(this.healthCheckRouter.healthCheckRoutes, {
-            prefix: '',
+            prefix: '/health-check',
         });
     };
 }

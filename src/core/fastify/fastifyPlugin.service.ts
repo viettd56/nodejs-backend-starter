@@ -57,9 +57,6 @@ export class FastifyPluginService {
     }
 
     public setBasicAuth(fastify: FastifyInstance): void {
-        // Authentication function
-        console.log('🚀 ~ FastifyPluginService ~ setBasicAuth ~ this.configsService');
-
         // Register plugin
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const fastifyBasicAuth = require('@fastify/basic-auth');

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
-import * as NodeCache from 'node-cache';
+import jwt from 'jsonwebtoken';
+import NodeCache from 'node-cache';
 import { ConfigsService } from 'src/configs/configs.service';
 
 /**

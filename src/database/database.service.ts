@@ -2,13 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { ConfigsService } from 'src/configs/configs.service';
 
 import { parse } from 'pg-connection-string';
-import { UserModel } from './data/User.model';
+import { UserModel } from './data/User/user.model';
 import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class DatabaseService {
     private _sequelize: Sequelize;
-    private _userModel: typeof UserModel;
     constructor(private readonly configsService: ConfigsService) {
         const models = [UserModel];
         const dbWriteParse = parse(this.configsService.databaseConfig.DATABASE_URL, {});
@@ -65,14 +64,9 @@ export class DatabaseService {
                 max: Infinity,
             },
         });
-        this._userModel = UserModel;
     }
 
     public get sequelize(): Sequelize {
         return this._sequelize;
-    }
-
-    public get userModel(): typeof UserModel {
-        return this._userModel;
     }
 }

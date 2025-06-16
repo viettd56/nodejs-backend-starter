@@ -13,7 +13,7 @@ export class CmsLoginRouter {
 
     public cmsLoginRoutes: FastifyPluginCallback = (app) => {
         app.withTypeProvider<TypeBoxTypeProvider>().post(
-            '/',
+            '',
             {
                 schema: {
                     body: Type.Object({

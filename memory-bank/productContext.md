@@ -33,7 +33,7 @@ This is a NestJS TypeScript starter repository designed to provide a robust foun
 ## Project Structure
 
 ```
-server-template-nestjs/
+server-template/
 ├── src/                          # Main application source code
 │   ├── app.module.ts             # Root application module
 │   ├── app.service.ts            # Root application service
@@ -67,8 +67,14 @@ server-template-nestjs/
 │   ├── database/                 # Database module and services
 │   │   ├── database.module.ts    # Database module
 │   │   ├── database.service.ts   # Database service
-│   │   └── data/                 # Data models
-│   │       └── User.model.ts     # User data model
+│   │   └── data/                 # Data models and entities
+│   │       └── User/             # User domain data layer
+│   │           ├── user.entity.ts        # User entity definition
+│   │           ├── user.model.ts         # User data model
+│   │           ├── user.repository.ts    # User repository
+│   │           └── _tests_/              # User data layer tests
+│   │               ├── user.entity.spec.ts      # Entity tests
+│   │               └── user.repository.spec.ts  # Repository tests
 │   ├── jobs/                     # Job queue and workers
 │   │   ├── JobQueue.config.ts    # Job queue configuration
 │   │   ├── jobs.module.ts        # Jobs module
@@ -112,16 +118,14 @@ server-template-nestjs/
 │   │       └── Validation.helper.ts  # Validation utilities
 │   ├── token/                    # JWT token management
 │   │   ├── token.module.ts       # Token module
-│   │   ├── token.service.spec.ts # Token service tests
-│   │   └── token.service.ts      # Token service
-│   └── user/                     # User management
-│       ├── user.entity.ts        # User entity
-│       ├── user.module.ts        # User module
-│       ├── user.repository.ts    # User repository
-│       └── user.service.ts       # User service
-├── test/                         # Test files
-│   ├── app.e2e-spec.ts           # End-to-end tests
-│   └── jest-e2e.json             # E2E test configuration
+│   │   ├── token.service.ts      # Token service
+│   │   └── _tests_/              # Token service tests
+│   │       └── token.service.spec.ts # Token service unit tests
+│   └── user/                     # User business logic module
+│       ├── user.module.ts        # User module definition
+│       ├── user.service.ts       # User business service
+│       └── _tests_/              # User service tests
+│           └── user.service.spec.ts  # User service unit tests
 ├── memory-bank/                  # Project documentation
 │   ├── productContext.md         # Project overview and context
 │   ├── activeContext.md          # Current status and focus
@@ -141,13 +145,23 @@ server-template-nestjs/
 
 ### Key Architectural Components
 
-1. **Modular Organization**: Clear separation by feature domains (user, cache, database, etc.)
+1. **Modular Organization**: Clear separation by feature domains with distinct business and data layers
 2. **Configuration Management**: Centralized config system with environment-specific settings
 3. **Authentication Flow**: Separate login paths for CMS and mobile clients
-4. **Data Layer**: Entity-Repository pattern with proper abstraction
-5. **API Layer**: Router-based organization with use case pattern
-6. **Infrastructure**: Fastify integration, Redis caching, and comprehensive helpers
-7. **Documentation**: Swagger integration and Memory Bank system
-8. **Testing**: Dedicated test structure with unit and e2e coverage
+4. **Data Layer**: Entity-Repository pattern with domain-specific data organization
+5. **Business Layer**: Separate service modules for business logic (user service vs data layer)
+6. **API Layer**: Router-based organization with use case pattern
+7. **Infrastructure**: Fastify integration, Redis caching, and comprehensive helpers
+8. **Documentation**: Swagger integration and Memory Bank system
+9. **Testing Strategy**: Comprehensive test coverage with organized `_tests_/` directories
+10. **Domain Separation**: Clear distinction between data entities and business services
+
+### Architecture Highlights
+
+- **Data vs Business Logic Separation**: User data entities (`src/database/data/User/`) are separate from user business services (`src/user/`)
+- **Test Organization**: Dedicated `_tests_/` directories within each module for better test organization
+- **Domain-Driven Structure**: Each domain has its own complete module structure with entities, repositories, and services
+- **Use Case Pattern**: Business logic organized in use case files for clear separation of concerns
 
 2025-01-06 17:16:35 - Added detailed project structure and architectural components documentation
+2025-01-16 11:34:00 - Updated structure to reflect current data/business layer separation and test organization

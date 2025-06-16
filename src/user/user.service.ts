@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Transaction } from 'sequelize';
-import { UserEntity } from './user.entity';
 import { TokenService } from 'src/token/token.service';
-import { UserRepository } from './user.repository';
+import { UserRepository } from 'src/database/data/User/user.repository';
+import { UserEntity } from 'src/database/data/User/user.entity';
 
 @Injectable()
 export class UserService {
@@ -61,15 +61,19 @@ export class UserService {
             transaction?: Transaction;
         } = {},
     ) => {
-        const userEntity = new UserEntity({
-            id: UserEntity.newId(),
-            name,
-            email: email || null,
-            password: await UserEntity.hashPassword(password),
-            extra_data: {},
-            has_transaction_lock: !!transaction,
-            username: username || null,
-        });
+        const userEntity = new UserEntity(
+            {
+                id: UserEntity.newId(),
+                name,
+                email: email || null,
+                password: await UserEntity.hashPassword(password),
+                extra_data: {},
+                username: username || null,
+            },
+            {
+                has_transaction_lock: !!transaction,
+            },
+        );
         return this.userRepository.create(userEntity, transaction);
     };
 }

@@ -12,7 +12,7 @@ export class HealthCheckRouter {
     constructor(private readonly healthCheckUsecase: HealthCheckUsecase) {}
     public healthCheckRoutes: FastifyPluginCallback = (app) => {
         app.withTypeProvider<TypeBoxTypeProvider>().get(
-            '/health-check',
+            '',
             {
                 schema: {
                     response: {
