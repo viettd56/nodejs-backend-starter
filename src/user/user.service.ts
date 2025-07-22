@@ -61,14 +61,12 @@ export class UserService {
             transaction?: Transaction;
         } = {},
     ) => {
-        const userEntity = new UserEntity(
+        const userEntity = await UserEntity.newUser(
             {
-                id: UserEntity.newId(),
                 name,
-                email: email || null,
-                password: await UserEntity.hashPassword(password),
-                extra_data: {},
-                username: username || null,
+                email,
+                password,
+                username,
             },
             {
                 has_transaction_lock: !!transaction,
