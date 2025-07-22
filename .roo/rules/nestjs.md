@@ -19,7 +19,7 @@ Generate code, corrections, and refactorings that comply with the basic principl
 
 - Use PascalCase for classes.
 - Use camelCase for variables, functions, and methods.
-- Use kebab-case for file and directory names.
+- Use camelCase for file and directory names.
 - Use UPPERCASE for environment variables.
     - Avoid magic numbers and define constants.
 - Start each function with a verb.

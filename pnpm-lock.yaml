@@ -92,6 +92,9 @@ importers:
       umzug:
         specifier: ^3.8.2
         version: 3.8.2(@types/node@22.15.31)
+      uuidv7:
+        specifier: ^1.0.2
+        version: 1.0.2
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.2.0
@@ -3837,6 +3840,10 @@ packages:
 
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    hasBin: true
+
+  uuidv7@1.0.2:
+    resolution: {integrity: sha512-8JQkH4ooXnm1JCIhqTMbtmdnYEn6oKukBxHn1Ic9878jMkL7daTI7anTExfY18VRCX7tcdn5quzvCb6EWrR8PA==}
     hasBin: true
 
   v8-compile-cache-lib@3.0.1:
@@ -8052,6 +8059,8 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   uuid@8.3.2: {}
+
+  uuidv7@1.0.2: {}
 
   v8-compile-cache-lib@3.0.1: {}
 

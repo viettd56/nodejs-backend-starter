@@ -1,6 +1,7 @@
 import { Model, Table, Column, DataType, ForeignKey, BelongsTo, Index, Unique } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import _ from 'lodash';
+import { uuidv7 } from 'uuidv7';
 
 type ExtraData = {};
 
@@ -31,6 +32,7 @@ export class UserModel extends Model<Attributes, CreationAttributes> implements 
     @Column({
         type: DataType.STRING,
         primaryKey: true,
+        defaultValue: () => uuidv7(),
     })
     declare id: string;
 

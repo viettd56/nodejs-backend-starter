@@ -2,6 +2,7 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 import { bcryptHelper } from 'src/shared/helpers/Bcrypt.helper';
 import { UserModel } from './user.model';
+import { uuidv7 } from 'uuidv7';
 
 const hashPassword = async (password: string) => {
     return bcryptHelper.hashPassword(password);
@@ -77,7 +78,38 @@ export class UserEntity {
         return hashPassword(password);
     }
 
-    public static newId = () => {
-        return 'U' + moment().unix().toString() + _.random(10000, 99999);
-    };
+    public static async newUser(
+        {
+            name,
+            email,
+            password,
+            username,
+        }: {
+            email?: string;
+            name: string;
+            username?: string;
+            password: string;
+        },
+        {
+            has_transaction_lock,
+        }: {
+            has_transaction_lock: boolean;
+        },
+    ) {
+        const userEntity = new UserEntity(
+            {
+                name,
+                email: email || null,
+                password: '',
+                extra_data: {},
+                username: username || null,
+                id: uuidv7(),
+            },
+            {
+                has_transaction_lock,
+            },
+        );
+        await userEntity.changePassword(password);
+        return userEntity;
+    }
 }
