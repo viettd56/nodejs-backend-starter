@@ -74,8 +74,8 @@ export class UserEntity {
         this.password = await hashPassword(password);
     }
 
-    public static async hashPassword(password: string) {
-        return hashPassword(password);
+    public async comparePassword(password: string) {
+        return bcryptHelper.comparePassword(password, this.password);
     }
 
     public static async newUser(
