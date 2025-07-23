@@ -11,4 +11,7 @@ async function bootstrap() {
     await appService.run();
     await app.close();
 }
-bootstrap();
+bootstrap().catch((e) => {
+    console.log('🚀 ~ bootstrap ~ e:', e);
+    process.exit(1);
+});

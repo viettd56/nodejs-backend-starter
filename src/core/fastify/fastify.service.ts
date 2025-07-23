@@ -27,19 +27,14 @@ export class FastifyService {
     }
 
     public start = async () => {
-        try {
-            if (this.configsService.serverConfig.SHOW_SWAGGER) {
-                await this.swaggerService.registerSwagger(this.fastify);
-                console.log(`API Documentation available at http://localhost:3000/documentation`);
-            }
-
-            this.routersService.registerRoutes(this.fastify);
-
-            await this.fastify.listen({ port: 3000 });
-            console.log(`Server listening at 3000`);
-        } catch (err) {
-            this.fastify.log.error(err);
-            process.exit(1);
+        if (this.configsService.serverConfig.SHOW_SWAGGER) {
+            await this.swaggerService.registerSwagger(this.fastify);
+            console.log(`API Documentation available at http://localhost:3000/documentation`);
         }
+
+        this.routersService.registerRoutes(this.fastify);
+
+        await this.fastify.listen({ port: 3000, host: '0.0.0.0' });
+        console.log(`Server listening at 3000`);
     };
 }
