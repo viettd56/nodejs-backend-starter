@@ -4,10 +4,10 @@ import { CacheRepository } from './cache.repository';
 
 @Injectable()
 export class CacheService {
-    constructor(private readonly cacheRepository: CacheRepository) {}
+    constructor(private readonly cacheRepository: CacheRepository) { }
 
     public OtherCache(ttl: number) {
-        const cache = new RedisCache(this.cacheRepository.cacheRepository, 'other:', ttl);
+        const cache = new RedisCache(this.cacheRepository.cacheRepository.redis, 'other:', ttl);
         return {
             async get(key: string) {
                 const data = await cache.get(key);

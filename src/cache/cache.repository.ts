@@ -31,8 +31,12 @@ const createRedis = (redisConfig: {
 
 @Injectable()
 export class CacheRepository {
-    private _cacheRepository: any;
-    private _bullCacheRepository: any;
+    private _cacheRepository: {
+        redis: Redis;
+    };
+    private _bullCacheRepository: {
+        redis: Redis;
+    };
 
     constructor(private readonly config: ConfigsService) {
         const cacheRepository = createRedis({
